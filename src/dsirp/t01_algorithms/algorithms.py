@@ -13,21 +13,27 @@
 # There is a point to these examples, which I will explain at the end.
 
 # **Exercise 1:** Write a function that takes two words and returns `True` if they are anagrams. Test your function with the examples below.
-
-from os.path import basename, exists
-from urllib.request import urlretrieve
+from collections import defaultdict
 
 from dsirp.helper_library.download import download
 
 
 def is_anagram(word1, word2):
-    return False
+    """
+    takes two words and returns `True` if they are anagrams.
+    """
+    return sorted(word1) == sorted(word2)
 
 
 def all_anagram_pairs(word_list):
+    """
+    takes a word list and returns a list of all anagram pairs.
+    """
+    result = []
+    for w1, w2 in zip(word_list, word_list):
+        if is_anagram(w1, w2):
+            result.append([w1, w2])
     return []
-
-
 
 
 def read_words(filename):
@@ -36,15 +42,24 @@ def read_words(filename):
     for line in open(filename):
         for word in line.split():
             res.add(word.strip().lower())
-    return res
+    return list(res)
 
 
 def all_anagram_lists(word_list):
-    """Finds all anagrams in a list of words.
-
+    """
+    Finds all anagrams in a list of words.
     word_list: sequence of strings
     """
-    return {}
+    potential_anagrams = defaultdict(list)
+    for word in word_list:
+        for word2 in word_list:
+            if word[0] in word2:
+                potential_anagrams[word].append(word2)
+    result = set([])
+    for word1, word2 in potential_anagrams.items():
+        if is_anagram(word1, word2):
+            result.add((word1, word2))
+    return list(result)
 
 
 if __name__ == "__main__":

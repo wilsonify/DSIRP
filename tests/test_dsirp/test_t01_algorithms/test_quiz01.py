@@ -1,20 +1,13 @@
 import os.path
 
-import pytest
-
 from dsirp.t01_algorithms import quiz01
-from dsirp.t01_algorithms.algorithms import read_words
+from dsirp.t01_algorithms.quiz01 import is_alphabetical
 
 current_file = os.path.abspath(__file__)
 test_dir, current_tail = os.path.split(current_file)
 test_head, test_tail = os.path.split(test_dir)
 top_test_dir, test_head_tail = os.path.split(test_head)
 data_dir = os.path.join(top_test_dir, "data")
-
-
-@pytest.fixture(name="word_list")
-def word_list_fixture():
-    return read_words(f"{data_dir}/american-english")
 
 
 def test_smoke():
@@ -29,14 +22,14 @@ def test_smoke():
 def test_read_words(word_list):
     assert len(word_list) == 100781
 
+
 def test_is_alphabetical():
     assert is_alphabetical('almost')
     assert not is_alphabetical('alphabetical')
 
+
 def test_main(word_list):
     # The following function takes a string and returns `True` if the letters in the string appear in alphabetical order.
-
-
 
     # Make a new list called `alpha_words` that contains only the words in `word_list` that are alphabetical, and display the length of the list.
 
