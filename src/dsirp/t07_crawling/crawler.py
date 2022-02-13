@@ -46,363 +46,360 @@ class WikiFetcher:
         self.next_request_time = time() + self.min_interval
 
 
-# -
+if __name__ == "__main__":
+    # -
 
-# Here's an example:
+    # Here's an example:
 
-# +
-fetcher = WikiFetcher()
+    # +
+    fetcher = WikiFetcher()
 
-url = 'https://en.wikipedia.org/wiki/Python_(programming_language)'
-soup = fetcher.fetch_wikipedia(url)
-# -
+    url = 'https://en.wikipedia.org/wiki/Python_(programming_language)'
+    soup = fetcher.fetch_wikipedia(url)
+    # -
 
-# The result is a BeautifulSoup object that represents the document object model (DOM) of the page.
-#
-# Note that `WikiFetcher` won't work if `url` is a bytearray, because `urlopen` doesn't work with bytearrays.
+    # The result is a BeautifulSoup object that represents the document object model (DOM) of the page.
+    #
+    # Note that `WikiFetcher` won't work if `url` is a bytearray, because `urlopen` doesn't work with bytearrays.
 
-url = b'https://en.wikipedia.org/wiki/Python_(programming_language)'
-# soup = fetcher.fetch_wikipedia(url)
+    url = b'https://en.wikipedia.org/wiki/Python_(programming_language)'
+    # soup = fetcher.fetch_wikipedia(url)
 
-# To convert a bytearray to a string, you have to decode it.
+    # To convert a bytearray to a string, you have to decode it.
 
-url_str = url.decode()
-soup = fetcher.fetch_wikipedia(url_str)
+    url_str = url.decode()
+    soup = fetcher.fetch_wikipedia(url_str)
 
-# Usually when you call `decode`, you should [specify which encoding to use](https://docs.python.org/3.8/library/stdtypes.html#bytes.decode). But in this case we know that the original strings were URLs, so the default encoding will work.
-#
-# Wikipedia pages contain boilerplate content that we don't want to index, so we'll select the `div` element that contains the "body content" of the page.
+    # Usually when you call `decode`, you should [specify which encoding to use](https://docs.python.org/3.8/library/stdtypes.html#bytes.decode). But in this case we know that the original strings were URLs, so the default encoding will work.
+    #
+    # Wikipedia pages contain boilerplate content that we don't want to index, so we'll select the `div` element that contains the "body content" of the page.
 
-root = soup.find(class_='mw-body-content')
+    root = soup.find(class_='mw-body-content')
 
-# ## Finding links
-#
-# From `philosophy.ipynb`, we have the following function that traverses the DOM and finds links.
+    # ## Finding links
+    #
+    # From `philosophy.ipynb`, we have the following function that traverses the DOM and finds links.
 
-# +
-from bs4 import Tag
+    # +
+    from bs4 import Tag
 
 
-def link_generator(root):
-    for element in root.descendants:
-        if isinstance(element, Tag) and element.name == 'a':
-            href = element.get('href', '')
-            if href.startswith('/wiki'):
-                yield element
+    def link_generator(root):
+        for element in root.descendants:
+            if isinstance(element, Tag) and element.name == 'a':
+                href = element.get('href', '')
+                if href.startswith('/wiki'):
+                    yield element
 
 
-# -
+    # -
 
-# This version includes links to images and other links we probably don't want to index.
-#
-# The following version includes a condition that checks whether the link has a `title` attribute, which seems to select mostly "good" links.
+    # This version includes links to images and other links we probably don't want to index.
+    #
+    # The following version includes a condition that checks whether the link has a `title` attribute, which seems to select mostly "good" links.
 
-def link_generator(root):
-    for element in root.descendants:
-        if isinstance(element, Tag) and element.name == 'a':
-            title = element.get('title', '')
-            href = element.get('href', '')
-            if title and href.startswith('/wiki'):
-                yield element
+    def link_generator(root):
+        for element in root.descendants:
+            if isinstance(element, Tag) and element.name == 'a':
+                title = element.get('title', '')
+                href = element.get('href', '')
+                if title and href.startswith('/wiki'):
+                    yield element
 
 
-# Here are the first few links from the page we downloaded.
+    # Here are the first few links from the page we downloaded.
 
-for i, link in enumerate(link_generator(root)):
-    print(link)
-    if i == 5:
-        break
+    for i, link in enumerate(link_generator(root)):
+        print(link)
+        if i == 5:
+            break
 
-# ## Finding words
-#
-# From `indexer.ipynb`, we have the following function, which traverses the DOM and yields individual words, stripped of punctuation and converted to lowercase.
+    # ## Finding words
+    #
+    # From `indexer.ipynb`, we have the following function, which traverses the DOM and yields individual words, stripped of punctuation and converted to lowercase.
 
-# +
-from bs4 import NavigableString
-from string import whitespace, punctuation
+    # +
+    from bs4 import NavigableString
+    from string import whitespace, punctuation
 
 
-def iterate_words(root):
-    for element in root.descendants:
-        if isinstance(element, NavigableString):
-            for word in element.string.split():
-                word = word.strip(whitespace + punctuation)
-                if word:
-                    yield word.lower()
+    def iterate_words(root):
+        for element in root.descendants:
+            if isinstance(element, NavigableString):
+                for word in element.string.split():
+                    word = word.strip(whitespace + punctuation)
+                    if word:
+                        yield word.lower()
 
 
-# -
+    # -
 
-# Here are the first words from the page we downloaded. They include keywords from the sidebar on the right side of the page, which are not part of the main text, but might be good to index anyway, since they indicate the topic of the page.
+    # Here are the first words from the page we downloaded. They include keywords from the sidebar on the right side of the page, which are not part of the main text, but might be good to index anyway, since they indicate the topic of the page.
 
-for i, word in enumerate(iterate_words(root)):
-    print(word)
-    if i > 200:
-        break
+    for i, word in enumerate(iterate_words(root)):
+        print(word)
+        if i > 200:
+            break
 
-# ## Redis
-#
-# Let's get Redis started.
+    # ## Redis
+    #
+    # Let's get Redis started.
 
-# +
+    # +
 
+    # !redis-server --daemonize yes
 
-# !redis-server --daemonize yes
+    # And make sure the Redis client is installed.
 
-# And make sure the Redis client is installed.
+    import redis
 
-import redis
+    # We'll make a `Redis` object that creates the connection to the Redis database.
 
-# We'll make a `Redis` object that creates the connection to the Redis database.
+    # +
+    import redis
 
-# +
-import redis
+    r = redis.Redis()
 
-r = redis.Redis()
 
+    # -
 
-# -
+    # If you have a Redis database running on a different machine, you can create a `Redis` object using the URL of the database, like this
+    #
+    # ```
+    # url = 'redis://redistogo:example@dory.redistogo.com:10534/'
+    # r = redis.Redis.from_url(url)
+    # ```
 
-# If you have a Redis database running on a different machine, you can create a `Redis` object using the URL of the database, like this
-#
-# ```
-# url = 'redis://redistogo:example@dory.redistogo.com:10534/'
-# r = redis.Redis.from_url(url)
-# ```
+    # If your database contains values from previous exercises, or if you make a mistake and want to start over, you can use the following function to clear the database.
 
-# If your database contains values from previous exercises, or if you make a mistake and want to start over, you can use the following function to clear the database.
+    # +
+    def clear_redis(r):
+        for key in r.keys():
+            r.delete(key)
 
-# +
-def clear_redis(r):
-    for key in r.keys():
-        r.delete(key)
 
+    # clear_redis(r)
 
-# clear_redis(r)
+    # -
 
+    # ## Indexing
+    #
+    # From `indexer.ipynb`, here's the function that counts the words on a page and adds the results to a Redis hash.
+    #
+    # For each word, it creates or updates a hash in the database that maps from URLs to word counts. For example if the word `python` appears 428 times on a page, we could find the hash with key `Index:python` and add an entry that maps from the URL to the number 428.
 
-# -
+    # +
+    from bs4 import BeautifulSoup
+    from collections import Counter
 
-# ## Indexing
-#
-# From `indexer.ipynb`, here's the function that counts the words on a page and adds the results to a Redis hash.
-#
-# For each word, it creates or updates a hash in the database that maps from URLs to word counts. For example if the word `python` appears 428 times on a page, we could find the hash with key `Index:python` and add an entry that maps from the URL to the number 428.
 
-# +
-from bs4 import BeautifulSoup
-from collections import Counter
+    def redis_index(root, url):
+        counter = Counter(iterate_words(root))
+        for word, count in counter.items():
+            if count >= 3:
+                key = f'Index:{word}'
+                # print(key, count)
+                r.hset(key, url, count)
 
 
-def redis_index(root, url):
-    counter = Counter(iterate_words(root))
-    for word, count in counter.items():
-        if count >= 3:
-            key = f'Index:{word}'
-            # print(key, count)
-            r.hset(key, url, count)
+    # -
 
+    # The previous version is likely to be slow because it makes many small requests to the database.
+    # We can speed it up using a pipeline object, like this:
 
-# -
+    # + tags=[]
+    def redis_index_pipeline(root, url):
+        counter = Counter(iterate_words(root))
+        p = r.pipeline(transaction=False)
+        for word, count in counter.items():
+            if count >= 3:
+                key = f'Index:{word}'
+                # print(key, count)
+                p.hset(key, url, count)
+        p.execute()
 
-# The previous version is likely to be slow because it makes many small requests to the database.
-# We can speed it up using a pipeline object, like this:
 
-# + tags=[]
-def redis_index_pipeline(root, url):
-    counter = Counter(iterate_words(root))
-    p = r.pipeline(transaction=False)
-    for word, count in counter.items():
-        if count >= 3:
-            key = f'Index:{word}'
-            # print(key, count)
-            p.hset(key, url, count)
-    p.execute()
+    # -
 
+    # Let's see which version is faster.
 
-# -
+    url = 'https://en.wikipedia.org/wiki/Python_(programming_language)'
+    soup = fetcher.fetch_wikipedia(url)
+    root = soup.find(class_='mw-body-content')
 
-# Let's see which version is faster.
+    redis_index(root, url)
 
-url = 'https://en.wikipedia.org/wiki/Python_(programming_language)'
-soup = fetcher.fetch_wikipedia(url)
-root = soup.find(class_='mw-body-content')
+    redis_index_pipeline(root, url)
 
-redis_index(root, url)
+    # We can use `hscan_iter` to iterate the field-values pairs in the index for the word `python`, and print the URLs of the pages where this word appears and the number of times it appears on each page.
 
-redis_index_pipeline(root, url)
+    # +
+    key = f'Index:python'
 
-# We can use `hscan_iter` to iterate the field-values pairs in the index for the word `python`, and print the URLs of the pages where this word appears and the number of times it appears on each page.
+    for page, count in r.hscan_iter(key):
+        print(page, count)
+    # -
 
-# +
-key = f'Index:python'
+    # Notice that when we get the number back, it's a bytearray. If we want to work with it as a number, we have to convert back to int.
 
-for page, count in r.hscan_iter(key):
-    print(page, count)
-# -
+    # ## Crawling
+    #
+    # In `philosophy.ipynb` we wrote a simple crawler that always follows the first link.
 
-# Notice that when we get the number back, it's a bytearray. If we want to work with it as a number, we have to convert back to int.
+    # +
+    from urllib.parse import urljoin
 
-# ## Crawling
-#
-# In `philosophy.ipynb` we wrote a simple crawler that always follows the first link.
+    target = 'https://en.wikipedia.org/wiki/Philosophy'
 
-# +
-from urllib.parse import urljoin
 
-target = 'https://en.wikipedia.org/wiki/Philosophy'
+    def get_to_philosophy(url):
+        visited = []
 
+        for i in range(20):
+            if url == target:
+                print(f'Got there in {i} steps!')
+                return visited
 
-def get_to_philosophy(url):
-    visited = []
+            if url in visited:
+                raise ValueError(f'URL already visited {url}')
+            else:
+                print(url)
+                visited.append(url)
 
-    for i in range(20):
-        if url == target:
-            print(f'Got there in {i} steps!')
-            return visited
+            soup = fetcher.fetch_wikipedia(url)
+            root = soup.find(class_='mw-body-content')
+            link = next(link_generator(root))
+            url = urljoin(url, link['href'])
 
-        if url in visited:
-            raise ValueError(f'URL already visited {url}')
-        else:
-            print(url)
-            visited.append(url)
+        return visited
 
-        soup = fetcher.fetch_wikipedia(url)
-        root = soup.find(class_='mw-body-content')
-        link = next(link_generator(root))
-        url = urljoin(url, link['href'])
 
-    return visited
+    # -
 
+    get_to_philosophy(url)
 
-# -
+    # Now we want a crawler that runs a breadth-first search.
+    # Here's the implementation of BFS from `bfs.ipynb`:
 
-get_to_philosophy(url)
+    # +
+    from collections import deque
 
-# Now we want a crawler that runs a breadth-first search.
-# Here's the implementation of BFS from `bfs.ipynb`:
 
-# +
-from collections import deque
+    def reachable_nodes_bfs(G, start):
+        seen = set()
+        queue = deque([start])
+        while queue:
+            node = queue.popleft()
+            if node not in seen:
+                seen.add(node)
+                neighbors = set(G[node]) - seen
+                queue.extend(neighbors)
+        return seen
 
 
-def reachable_nodes_bfs(G, start):
-    seen = set()
-    queue = deque([start])
-    while queue:
-        node = queue.popleft()
-        if node not in seen:
-            seen.add(node)
-            neighbors = set(G[node]) - seen
-            queue.extend(neighbors)
-    return seen
+    # -
 
+    #
+    # **Exercise:** Write a function called `crawl` that takes a starting URL as a parameter, and an optional number of pages to crawl.
+    #
+    # It should create a queue of URLs and work it's way through the queue, indexing pages as it goes and adding new links to the queue.
+    #
+    # For a first draft, I suggest using Python data structures to keep track of the queue and the set of URLs that have already been seen/indexed.
+    #
+    #
 
-# -
+    url = 'https://en.wikipedia.org/wiki/Python_(programming_language)'
+    seen = crawl(url)
 
-#
-# **Exercise:** Write a function called `crawl` that takes a starting URL as a parameter, and an optional number of pages to crawl.
-#
-# It should create a queue of URLs and work it's way through the queue, indexing pages as it goes and adding new links to the queue.
-#
-# For a first draft, I suggest using Python data structures to keep track of the queue and the set of URLs that have already been seen/indexed.
-#
-#
+    key = 'Index:the'
+    for page, count in r.hscan_iter(key):
+        print(page, count)
 
+    # For a second draft, consider storing these structures in Redis so they are persistent; that way, you can call `crawl` later and it will pick up from where it left off. Or you could have multiple crawlers running at the same time.
+    #
+    # Hint: When you read a URL from Redis, you might have to decode it to make a string.
 
-url = 'https://en.wikipedia.org/wiki/Python_(programming_language)'
-seen = crawl(url)
+    # +
+    queue_key = 'Crawler:queue'
 
-key = 'Index:the'
-for page, count in r.hscan_iter(key):
-    print(page, count)
+    r.lpop(queue_key)
 
-# For a second draft, consider storing these structures in Redis so they are persistent; that way, you can call `crawl` later and it will pick up from where it left off. Or you could have multiple crawlers running at the same time.
-#
-# Hint: When you read a URL from Redis, you might have to decode it to make a string.
+    # +
+    seen_key = 'Crawler:seen'
 
-# +
-queue_key = 'Crawler:queue'
+    r.sismember(seen_key, 'anything')
+    # -
 
-r.lpop(queue_key)
+    url = 'https://en.wikipedia.org/wiki/Object-oriented_programming'
+    crawl_persistent(url)
 
-# +
-seen_key = 'Crawler:seen'
+    r.smembers(seen_key)
 
-r.sismember(seen_key, 'anything')
-# -
+    r.lrange(queue_key, 0, -1)
 
+    crawl_persistent()
 
-url = 'https://en.wikipedia.org/wiki/Object-oriented_programming'
-crawl_persistent(url)
+    # ## Stop words
+    #
+    # The most common English words are likely to appear on every page.
+    # They don't indicate what the page is about, and we might not want to index them. Words that we don't index are sometimes called [stop words](https://en.wikipedia.org/wiki/Stop_word).
+    #
+    # Once you have indexed a few pages, use the index to identify the words that have appeared the most times, totaled across all pages.
 
-r.smembers(seen_key)
+    # + tags=[]
+    word_key = 'Index:the'
+    r.hvals(word_key)
 
-r.lrange(queue_key, 0, -1)
+    # + tags=[]
+    sum(int(x) for x in r.hvals(word_key))
 
-crawl_persistent()
+    # + tags=[]
+    counter = Counter()
 
-# ## Stop words
-#
-# The most common English words are likely to appear on every page.
-# They don't indicate what the page is about, and we might not want to index them. Words that we don't index are sometimes called [stop words](https://en.wikipedia.org/wiki/Stop_word).
-#
-# Once you have indexed a few pages, use the index to identify the words that have appeared the most times, totaled across all pages.
+    for word_key in r.keys('Index*'):
+        total = sum(int(x) for x in r.hvals(word_key))
+        word = word_key.decode().split(':')[1]
+        counter[word] = total
 
-# + tags=[]
-word_key = 'Index:the'
-r.hvals(word_key)
+    # + tags=[]
+    counter.most_common(20)
+    # -
 
-# + tags=[]
-sum(int(x) for x in r.hvals(word_key))
+    # The following cells use the results to make a Zipf plot, which shows counts versus "rank" on a log-log scale (the most common word has rank 1, the next most common has rank 2, and so on).
+    #
+    # Zipf's law asserts that the distribution of word frequencies follows a power law, which implies that the Zipf plot is approximately a straight line.
 
-# + tags=[]
-counter = Counter()
+    # +
+    import numpy as np
 
-for word_key in r.keys('Index*'):
-    total = sum(int(x) for x in r.hvals(word_key))
-    word = word_key.decode().split(':')[1]
-    counter[word] = total
+    res = []
 
-# + tags=[]
-counter.most_common(20)
-# -
+    for i, (word, count) in enumerate(counter.most_common()):
+        res.append((i + 1, count))
 
-# The following cells use the results to make a Zipf plot, which shows counts versus "rank" on a log-log scale (the most common word has rank 1, the next most common has rank 2, and so on).
-#
-# Zipf's law asserts that the distribution of word frequencies follows a power law, which implies that the Zipf plot is approximately a straight line.
+    rank, count = np.transpose(res)
 
-# +
-import numpy as np
+    # +
+    import matplotlib.pyplot as plt
 
-res = []
+    plt.plot(rank, count)
+    plt.xlabel('Rank')
+    plt.ylabel('Count')
+    plt.title('Zipf plot')
+    plt.xscale('log')
+    plt.yscale('log')
+    # -
 
-for i, (word, count) in enumerate(counter.most_common()):
-    res.append((i + 1, count))
+    # ## Shutdown
+    #
+    # If you are running this notebook on your own computer, you can use the following command to shut down the Redis server.
+    #
+    # If you are running on Colab, it's not really necessary: the Redis server will get shut down when the Colab runtime shuts down (and everything stored in it will disappear).
 
-rank, count = np.transpose(res)
+    # !killall redis-server
 
-# +
-import matplotlib.pyplot as plt
-
-plt.plot(rank, count)
-plt.xlabel('Rank')
-plt.ylabel('Count')
-plt.title('Zipf plot')
-plt.xscale('log')
-plt.yscale('log')
-# -
-
-# ## Shutdown
-#
-# If you are running this notebook on your own computer, you can use the following command to shut down the Redis server.
-#
-# If you are running on Colab, it's not really necessary: the Redis server will get shut down when the Colab runtime shuts down (and everything stored in it will disappear).
-
-# !killall redis-server
-
-# *Data Structures and Information Retrieval in Python*
-#
-# Copyright 2021 Allen Downey
-#
-# License: [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+    # *Data Structures and Information Retrieval in Python*
+    #
+    # Copyright 2021 Allen Downey
+    #
+    # License: [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-nc-sa/4.0/)

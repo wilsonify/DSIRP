@@ -39,290 +39,286 @@ class Node:
         self.data = data
         self.left = left
         self.right = right
-        
+
     def __repr__(self):
         return f'Node({self.data})'
 
 
-# We can create nodes like this:
+if __name__ == "__main__":
+    # We can create nodes like this:
 
-# + tags=[]
-node1 = Node(1)
-node2 = Node(2)
-node3 = Node(3)
+    # + tags=[]
+    node1 = Node(1)
+    node2 = Node(2)
+    node3 = Node(3)
 
-node1
-# -
+    node1
+    # -
 
-# And then link them up, like this:
+    # And then link them up, like this:
 
-# + tags=[]
-node1.right = node2
-node2.right = node3
+    # + tags=[]
+    node1.right = node2
+    node2.right = node3
 
-node2.left = node1
-node3.left = node2
-# -
+    node2.left = node1
+    node3.left = node2
+    # -
 
-# To traverse the list from left to right, we can start at the beginning and follow the `right` links.
+    # To traverse the list from left to right, we can start at the beginning and follow the `right` links.
 
-node = node1
-while node:
-    print(node)
-    node = node.right
-
-# To traverse from right to left, we start and the end and follow the `left` links.
-
-node = node3
-while node:
-    print(node)
-    node = node.left
-
-
-# ## Deque objects
-#
-# For some operations, it will be convenient to have another object that represents the whole list (as opposed to one of its nodes).
-#
-# Here's the class definition.
-
-class Deque:
-    def __init__(self, head=None, tail=None):
-        self.head = head
-        self.tail = tail
-        
-    def __repr__(self):
-        return f'LinkedList({self.head}, {self.tail})'
-
-
-# Now we can create a `Deque` with references to `node1` and `node3`:
-
-# + tags=[]
-deque = Deque(node1, node3)
-deque
-
-
-# -
-
-# For debugging purposes, I'll use the following function, which prints the list from right to left and then left to right, which confirms that all of the links are correct.
-
-def print_deque(deque):
-    node = deque.head
+    node = node1
     while node:
-        print(node.data, end=', ')
+        print(node)
         node = node.right
-    print()
-    
-    node = deque.tail
+
+    # To traverse from right to left, we start and the end and follow the `left` links.
+
+    node = node3
     while node:
-        print(node.data, end=', ')
+        print(node)
         node = node.left
-    print()
 
 
-# Here's an example.
+    # ## Deque objects
+    #
+    # For some operations, it will be convenient to have another object that represents the whole list (as opposed to one of its nodes).
+    #
+    # Here's the class definition.
 
-print_deque(deque)
+    class Deque:
+        def __init__(self, head=None, tail=None):
+            self.head = head
+            self.tail = tail
 
-
-# ## Push
-#
-# Now let's see how we can add and remove elements from the beginning and end in constant time.
-# We'll start with the push operations.
-#
-# If we start with an empty deque, adding the first node is a special case, so I'll pull that into a function.
-
-# + tags=[]
-def push_first(deque, value):
-    deque.head = deque.tail = Node(value, None, None)
+        def __repr__(self):
+            return f'LinkedList({self.head}, {self.tail})'
 
 
-# -
+    # Now we can create a `Deque` with references to `node1` and `node3`:
 
-# Here's an example.
-
-# + tags=[]
-deque = Deque()
-push_first(deque, 1)
-print_deque(deque)
-# -
-
-# **Exercise:**  Write `left_push`, which takes a `Deque` object and a new value, and adds the value to the beginning of the deque.
-#
-# If the queue is empty, it should call `push_first` to handle the special case; otherwise it should handle the general case.
+    # + tags=[]
+    deque = Deque(node1, node3)
+    deque
 
 
+    # -
 
-# You can use the following examples to test your function:
+    # For debugging purposes, I'll use the following function, which prints the list from right to left and then left to right, which confirms that all of the links are correct.
 
-deque = Deque()
-left_push(deque, 2)
-print_deque(deque)
+    def print_deque(deque):
+        node = deque.head
+        while node:
+            print(node.data, end=', ')
+            node = node.right
+        print()
 
-left_push(deque, 1)
-print_deque(deque)
-
-# **Exercise:**  Write `right_push`, which takes a `Deque` object and a new value, and adds the value to the end of the deque.
-#
-# If the queue is empty, it should call `push_first` to handle the special case; otherwise it should handle the general case.
-
-
-
-# You can use the following examples to test your function:
-
-deque = Deque()
-right_push(deque, 3)
-print_deque(deque)
-
-right_push(deque, 4)
-print_deque(deque)
+        node = deque.tail
+        while node:
+            print(node.data, end=', ')
+            node = node.left
+        print()
 
 
-# ## Pop
-#
-# To pop elements from the deque, we have to handle two special cases:
-#
-# * If `head` and `tail` are both `None`, the deque is empty and we should raise a `ValueError`.
-#
-# * If `head` and `tail` refer to the same `Node`, there is only one element, so we should remove it and leave the deque empty.
-#
-# The following function handles these cases.
+    # Here's an example.
 
-# + tags=[]
-def pop_last(deque):
-    if deque.head is None:
-        raise ValueError('Tried to pop from empty deque')
-    
-    old_head = deque.head
-    deque.head = deque.tail = None
-    return old_head.data
+    print_deque(deque)
 
 
-# -
+    # ## Push
+    #
+    # Now let's see how we can add and remove elements from the beginning and end in constant time.
+    # We'll start with the push operations.
+    #
+    # If we start with an empty deque, adding the first node is a special case, so I'll pull that into a function.
 
-# We can test it like this:
-
-# + tags=[]
-deque = Deque()
-left_push(deque, 1)
-pop_last(deque)
-
-# + tags=[]
-print_deque(deque)
-# -
-
-# **Exercise:**  Write `left_pop`, which takes a `Deque` object, remove the first node, and return the first data value.
-#
-# If the queue is empty or has a single element, it should call `pop_last` to handle the special case; otherwise it should handle the general case.
+    # + tags=[]
+    def push_first(deque, value):
+        deque.head = deque.tail = Node(value, None, None)
 
 
+    # -
 
-# You can use the following example to test your code.
+    # Here's an example.
 
-deque = Deque()
-left_push(deque, 2)
-left_push(deque, 1)
-print_deque(deque)
+    # + tags=[]
+    deque = Deque()
+    push_first(deque, 1)
+    print_deque(deque)
+    # -
 
-left_pop(deque)
+    # **Exercise:**  Write `left_push`, which takes a `Deque` object and a new value, and adds the value to the beginning of the deque.
+    #
+    # If the queue is empty, it should call `push_first` to handle the special case; otherwise it should handle the general case.
 
-# Check to see whether the remaining list is well-formed.
+    # You can use the following examples to test your function:
 
-print_deque(deque)
+    deque = Deque()
+    left_push(deque, 2)
+    print_deque(deque)
 
-left_pop(deque)
+    left_push(deque, 1)
+    print_deque(deque)
 
-try:
+    # **Exercise:**  Write `right_push`, which takes a `Deque` object and a new value, and adds the value to the end of the deque.
+    #
+    # If the queue is empty, it should call `push_first` to handle the special case; otherwise it should handle the general case.
+
+    # You can use the following examples to test your function:
+
+    deque = Deque()
+    right_push(deque, 3)
+    print_deque(deque)
+
+    right_push(deque, 4)
+    print_deque(deque)
+
+
+    # ## Pop
+    #
+    # To pop elements from the deque, we have to handle two special cases:
+    #
+    # * If `head` and `tail` are both `None`, the deque is empty and we should raise a `ValueError`.
+    #
+    # * If `head` and `tail` refer to the same `Node`, there is only one element, so we should remove it and leave the deque empty.
+    #
+    # The following function handles these cases.
+
+    # + tags=[]
+    def pop_last(deque):
+        if deque.head is None:
+            raise ValueError('Tried to pop from empty deque')
+
+        old_head = deque.head
+        deque.head = deque.tail = None
+        return old_head.data
+
+
+    # -
+
+    # We can test it like this:
+
+    # + tags=[]
+    deque = Deque()
+    left_push(deque, 1)
+    pop_last(deque)
+
+    # + tags=[]
+    print_deque(deque)
+    # -
+
+    # **Exercise:**  Write `left_pop`, which takes a `Deque` object, remove the first node, and return the first data value.
+    #
+    # If the queue is empty or has a single element, it should call `pop_last` to handle the special case; otherwise it should handle the general case.
+
+    # You can use the following example to test your code.
+
+    deque = Deque()
+    left_push(deque, 2)
+    left_push(deque, 1)
+    print_deque(deque)
+
     left_pop(deque)
-except ValueError as e:
-    print(e)
 
-# **Exercise:**  Write `right_pop`, which takes a `Deque` object, remove the last node, and return the last data value.
-#
-# If the queue is empty or has a single element, it should call `pop_last` to handle the special case; otherwise it should handle the general case.
+    # Check to see whether the remaining list is well-formed.
 
+    print_deque(deque)
 
+    left_pop(deque)
 
-# You can use the following examples to test your function.
+    try:
+        left_pop(deque)
+    except ValueError as e:
+        print(e)
 
-deque = Deque()
-left_push(deque, 2)
-left_push(deque, 1)
-print(deque)
+    # **Exercise:**  Write `right_pop`, which takes a `Deque` object, remove the last node, and return the last data value.
+    #
+    # If the queue is empty or has a single element, it should call `pop_last` to handle the special case; otherwise it should handle the general case.
 
-right_pop(deque)
+    # You can use the following examples to test your function.
 
-print_deque(deque)
+    deque = Deque()
+    left_push(deque, 2)
+    left_push(deque, 1)
+    print(deque)
 
-right_pop(deque)
-
-try:
     right_pop(deque)
-except ValueError as e:
-    print(e)
 
-# ## collections.deque
-#
-# The Python collections module provides an implementation of a deque.
-# You can read the 
-# [documentation here](https://docs.python.org/3/library/collections.html#collections.deque)
-# and the
-# [source code here](https://github.com/python/cpython/blob/d943d19172aa93ce88bade15b9f23a0ce3bc72ff/Modules/_collectionsmodule.c).
-#
-# To confirm that it can add and remove elements from the beginning and end in constant time, let's run some timing tests.
+    print_deque(deque)
 
-# +
-from os.path import basename, exists
+    right_pop(deque)
 
-def download(url):
-    filename = basename(url)
-    if not exists(filename):
-        from urllib.request import urlretrieve
-        local, _ = urlretrieve(url, filename)
-        print('Downloaded ' + local)
-    
-download('https://github.com/AllenDowney/DSIRP/raw/main/timing.py')
+    try:
+        right_pop(deque)
+    except ValueError as e:
+        print(e)
 
-# +
-from collections import deque
+    # ## collections.deque
+    #
+    # The Python collections module provides an implementation of a deque.
+    # You can read the
+    # [documentation here](https://docs.python.org/3/library/collections.html#collections.deque)
+    # and the
+    # [source code here](https://github.com/python/cpython/blob/d943d19172aa93ce88bade15b9f23a0ce3bc72ff/Modules/_collectionsmodule.c).
+    #
+    # To confirm that it can add and remove elements from the beginning and end in constant time, let's run some timing tests.
 
-def appendleft(n):
-    d = deque()
-    [d.appendleft(x) for x in range(n)]
+    # +
+    from os.path import basename, exists
 
 
-# -
-
-def popleft(n):
-    d = deque()
-    [d.appendleft(x) for x in range(n)]    
-    [d.popleft() for _ in range(n)]
-
-
-# +
-from timing import run_timing_test
-
-ns, ts = run_timing_test(appendleft)
+    def download(url):
+        filename = basename(url)
+        if not exists(filename):
+            from urllib.request import urlretrieve
+            local, _ = urlretrieve(url, filename)
+            print('Downloaded ' + local)
 
 
-# -
+    download('https://github.com/AllenDowney/DSIRP/raw/main/timing.py')
 
-def append(n):
-    d = deque()
-    [d.append(x) for x in range(n)]
+    # +
+    from collections import deque
 
 
-# +
-from timing import plot_timing_test
+    def appendleft(n):
+        d = deque()
+        [d.appendleft(x) for x in range(n)]
 
-plot_timing_test(ns, ts, scale='linear')
-# -
 
-# Running these operations `n` times is linear in `n`, which means that each one is constant time, at least on average.
+    # -
 
-# **Exercise:** Modify the examples above to confirm that `append` and `pop` are also constant time.
+    def popleft(n):
+        d = deque()
+        [d.appendleft(x) for x in range(n)]
+        [d.popleft() for _ in range(n)]
 
-# *Data Structures and Information Retrieval in Python*
-#
-# Copyright 2021 Allen Downey
-#
-# License: [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+
+    # +
+    from timing import run_timing_test
+
+    ns, ts = run_timing_test(appendleft)
+
+
+    # -
+
+    def append(n):
+        d = deque()
+        [d.append(x) for x in range(n)]
+
+
+    # +
+    from timing import plot_timing_test
+
+    plot_timing_test(ns, ts, scale='linear')
+    # -
+
+    # Running these operations `n` times is linear in `n`, which means that each one is constant time, at least on average.
+
+    # **Exercise:** Modify the examples above to confirm that `append` and `pop` are also constant time.
+
+    # *Data Structures and Information Retrieval in Python*
+    #
+    # Copyright 2021 Allen Downey
+    #
+    # License: [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-nc-sa/4.0/)

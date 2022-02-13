@@ -45,7 +45,6 @@
 # Write a (Python) function called `f` that computes this (mathematical) function.
 
 
-
 # You can use the following examples to test your function.
 
 assert f(2, 1) == 2
@@ -54,7 +53,7 @@ assert f(4, 1) == 4
 
 assert f(4, 2) == 6
 
-assert f(5, 3) == 10 
+assert f(5, 3) == 10
 
 assert f(10, 5) == 252
 
@@ -72,16 +71,15 @@ assert f(10, 5) == 252
 # There's an example of memoization in recursion.ipynb.
 
 
-
 # You can use this example to confirm that the function still works.
 
 f_memo(10, 5)
-
 
 # And use this one to confirm that it is faster.
 # It should take less than a second, and the result should be `100891344545564193334812497256`.
 
 f_memo(100, 50)
+
 
 # ## LetterSet
 #
@@ -98,165 +96,159 @@ f_memo(100, 50)
 class LetterSet:
     def __init__(self, bits=None):
         if bits is None:
-            bits = [False]*26
+            bits = [False] * 26
         self.bits = bits
-        
+
     def __repr__(self):
         return f'LetterSet({repr(self.bits)})'
 
 
-# If all of the elements in the list are False, the set is empty.
+if __name__ == "__main__":
+    # If all of the elements in the list are False, the set is empty.
 
-set1 = LetterSet()
-set1
-
-
-# To add a letter to a set, we have to compute the index that corresponds to a given letter.
-# The following function uses `ord`, which is a built-in Python function, to compute the index of a given letter.
-
-def get_index(letter):
-    return ord(letter.lower()) - ord('a')
+    set1 = LetterSet()
+    set1
 
 
-# The index of `a` is 0, and the index of `Z` is 25.
+    # To add a letter to a set, we have to compute the index that corresponds to a given letter.
+    # The following function uses `ord`, which is a built-in Python function, to compute the index of a given letter.
 
-get_index('a'), get_index('Z')
-
-
-# To add a letter, we set the corresponding element of the list to `True`.
-
-def add(ls, letter):
-    ls.bits[get_index(letter)] = True
+    def get_index(letter):
+        return ord(letter.lower()) - ord('a')
 
 
-add(set1, 'a')
-add(set1, 'Z')
-set1
+    # The index of `a` is 0, and the index of `Z` is 25.
+
+    get_index('a'), get_index('Z')
 
 
-# To count the elements of a set, we can use the built-in `sum` function:
+    # To add a letter, we set the corresponding element of the list to `True`.
 
-def size(ls):
-    return sum(ls.bits)
-
-
-size(set1)
-
-# ## Question 3
-#
-# Write a function called `is_in` that takes a set and a letter and returns `True` if the letter is in the set.
-# In a comment, identify the order of growth of this function.
+    def add(ls, letter):
+        ls.bits[get_index(letter)] = True
 
 
-
-#
-# Use the following examples to test your code.
-
-is_in(set1, 'a'), is_in(set1, 'b')
-
-# ## Question 4
-#
-# Write a function called `intersect` that takes two `LetterSet` objects and returns a new `LetterSet` that represents the intersection of the two sets.
-# In other words, the new `LetterSet` should contain only elements that appear in both sets.
-#
-# In a comment, identify the order of growth of this function.
+    add(set1, 'a')
+    add(set1, 'Z')
+    set1
 
 
+    # To count the elements of a set, we can use the built-in `sum` function:
 
-# Use the following examples to test your code.
-
-intersect(set1, set1)
-
-set2 = LetterSet()
-add(set2, 'a')
-add(set2, 'b')
-
-set3 = intersect(set1, set2)
-set3
-
-size(set3)
+    def size(ls):
+        return sum(ls.bits)
 
 
-# ## Just for fun bonus question
-#
-# One way to represent large numbers is to use a linked list where each node contains a digit.
-#
-# Here are class definitions for `DigitList`, which represents a list of digits, and `Node`, which contains one digit and a reference to the next `Node` in the list.
+    size(set1)
 
-class DigitList:
-    def __init__(self, head=None):
-        self.head = head
+    # ## Question 3
+    #
+    # Write a function called `is_in` that takes a set and a letter and returns `True` if the letter is in the set.
+    # In a comment, identify the order of growth of this function.
 
+    #
+    # Use the following examples to test your code.
 
-class Node:
-    def __init__(self, data=None, next=None):
-        self.data = data
-        self.next = next
+    is_in(set1, 'a'), is_in(set1, 'b')
 
+    # ## Question 4
+    #
+    # Write a function called `intersect` that takes two `LetterSet` objects and returns a new `LetterSet` that represents the intersection of the two sets.
+    # In other words, the new `LetterSet` should contain only elements that appear in both sets.
+    #
+    # In a comment, identify the order of growth of this function.
 
-# In a `DigitList`, digits are stored in reverse order, so a list that contains the digits `1`, `2`, and `3`, in that order, represents the number `321`.
+    # Use the following examples to test your code.
 
-head = Node(1, Node(2, Node(3, None)))
-head
+    intersect(set1, set1)
 
-dl321 = DigitList(head)
-dl321
+    set2 = LetterSet()
+    add(set2, 'a')
+    add(set2, 'b')
 
+    set3 = intersect(set1, set2)
+    set3
 
-# The following function takes a `DigitList` and prints the digits in reverse order.
-
-# +
-def print_dl(dl):
-    print_dl_rec(dl.head)
-    print()
-    
-def print_dl_rec(node):
-    if node is not None:
-        print_dl_rec(node.next)
-        print(node.data, end='')
+    size(set3)
 
 
-# -
+    # ## Just for fun bonus question
+    #
+    # One way to represent large numbers is to use a linked list where each node contains a digit.
+    #
+    # Here are class definitions for `DigitList`, which represents a list of digits, and `Node`, which contains one digit and a reference to the next `Node` in the list.
 
-print_dl(dl321)
-
-head = Node(4, Node(5, Node(6, None)))
-dl654 = DigitList(head)
-print_dl(dl654)
-
-# Write a function called `add` that takes two `DigitList` objects and returns a new `DigitList` that represents their sum.
-
-divmod(11, 10)
+    class DigitList:
+        def __init__(self, head=None):
+            self.head = head
 
 
-
-# You can use the following examples to test your code.
-
-total = add(dl321, dl654)
-print_dl(total)
-321 + 654
-
-head = Node(7, Node(8, None))
-dl87 = DigitList(head)
-print_dl(dl87)
-
-print_dl(add(dl654, dl87))
-654+87
-
-print_dl(add(dl87, dl654))
-87+654
-
-zero = DigitList(None)
-print_dl(add(dl87, zero))
-87 + 0
-
-print_dl(add(zero, dl87))
-0 + 87
-
-# *Data Structures and Information Retrieval in Python*
-#
-# Copyright 2021 Allen Downey
-#
-# License: [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+    class Node:
+        def __init__(self, data=None, next=None):
+            self.data = data
+            self.next = next
 
 
+    # In a `DigitList`, digits are stored in reverse order, so a list that contains the digits `1`, `2`, and `3`, in that order, represents the number `321`.
+
+    head = Node(1, Node(2, Node(3, None)))
+    head
+
+    dl321 = DigitList(head)
+    dl321
+
+
+    # The following function takes a `DigitList` and prints the digits in reverse order.
+
+    # +
+    def print_dl(dl):
+        print_dl_rec(dl.head)
+        print()
+
+
+    def print_dl_rec(node):
+        if node is not None:
+            print_dl_rec(node.next)
+            print(node.data, end='')
+
+
+    # -
+
+    print_dl(dl321)
+
+    head = Node(4, Node(5, Node(6, None)))
+    dl654 = DigitList(head)
+    print_dl(dl654)
+
+    # Write a function called `add` that takes two `DigitList` objects and returns a new `DigitList` that represents their sum.
+
+    divmod(11, 10)
+
+    # You can use the following examples to test your code.
+
+    total = add(dl321, dl654)
+    print_dl(total)
+    321 + 654
+
+    head = Node(7, Node(8, None))
+    dl87 = DigitList(head)
+    print_dl(dl87)
+
+    print_dl(add(dl654, dl87))
+    654 + 87
+
+    print_dl(add(dl87, dl654))
+    87 + 654
+
+    zero = DigitList(None)
+    print_dl(add(dl87, zero))
+    87 + 0
+
+    print_dl(add(zero, dl87))
+    0 + 87
+
+    # *Data Structures and Information Retrieval in Python*
+    #
+    # Copyright 2021 Allen Downey
+    #
+    # License: [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-nc-sa/4.0/)

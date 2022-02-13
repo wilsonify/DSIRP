@@ -19,6 +19,7 @@
 # + tags=[]
 from os.path import basename, exists
 
+
 def download(url):
     filename = basename(url)
     if not exists(filename):
@@ -78,6 +79,7 @@ type(soup)
 # +
 from bs4 import NavigableString
 from string import whitespace, punctuation
+
 
 def iterate_words(soup):
     for element in soup.descendants:
@@ -150,75 +152,66 @@ IN_COLAB = 'google.colab' in sys.modules
 
 # And make sure the Redis client is installed.
 
-import redis
-
 # And let's make a `Redis` object that creates the connection to the Redis database.
 
 # +
 import redis
 
-r = redis.Redis()
-# -
+if __name__ == "__main__":
+    r = redis.Redis()
+    # -
 
-# If you have a Redis database running on a different machine, you can create a `Redis` object using the URL of the database, like this
-#
-# ```
-# url = 'redis://redistogo:example@dory.redistogo.com:10534/'
-# r = redis.Redis.from_url(url)
-# ```
+    # If you have a Redis database running on a different machine, you can create a `Redis` object using the URL of the database, like this
+    #
+    # ```
+    # url = 'redis://redistogo:example@dory.redistogo.com:10534/'
+    # r = redis.Redis.from_url(url)
+    # ```
 
-# **Exercise:** Write a function called `redis_index` that takes a URL and indexes it. It should download the web page with the given URL, iterate through the words, and make a `Counter` that maps from words to their frequencies.
-#
-# Then it should iterate through the words and add field-value pairs to Redis hashes.
-#
-# * The keys for the hashes should have the prefix `Index:`; for example, the key for the word `python` should be `Index:python`.
-#
-# * The fields in the hashes should be URLs. 
-#
-# * The values in the hashes should be word counts.
-#
-# Use your function to index at least these two pages:
+    # **Exercise:** Write a function called `redis_index` that takes a URL and indexes it. It should download the web page with the given URL, iterate through the words, and make a `Counter` that maps from words to their frequencies.
+    #
+    # Then it should iterate through the words and add field-value pairs to Redis hashes.
+    #
+    # * The keys for the hashes should have the prefix `Index:`; for example, the key for the word `python` should be `Index:python`.
+    #
+    # * The fields in the hashes should be URLs.
+    #
+    # * The values in the hashes should be word counts.
+    #
+    # Use your function to index at least these two pages:
 
-url1 = 'https://en.wikipedia.org/wiki/Python_(programming_language)'
-url2 = 'https://en.wikipedia.org/wiki/Python_(genus)'
+    url1 = 'https://en.wikipedia.org/wiki/Python_(programming_language)'
+    url2 = 'https://en.wikipedia.org/wiki/Python_(genus)'
 
+    # Use `hscan_iter` to iterate the field-values pairs in the index for the word `python`.
+    # Print the URLs of the pages where this word appears and the number of times it appears on each page.
 
+    # ## Shutdown
+    #
+    # If you are running this notebook on your own computer, you can use the following command to shut down the Redis server.
+    #
+    # If you are running on Colab, it's not really necessary: the Redis server will get shut down when the Colab runtime shuts down (and everything stored in it will disappear).
 
+    # !killall redis-server
 
+    # ## RedisToGo
+    #
+    # [RedisToGo](https://redistogo.com) is a hosting service that provides remote Redis databases.
+    # They offer a free plan that includes a small database that is perfect for testing our indexer.
+    #
+    # If you sign up and go to your list of instances, you should find a URL that looks like this:
+    #
+    # ```
+    # redis://redistogo:digitsandnumbers@dory.redistogo.com:10534/
+    # ```
+    #
+    # If you pass this url to `Redis.from_url`, as described above, you should be able to connect to your database on RedisToGo and run your exercise solution again.
+    #
+    # And if you come back later and read the index, your data should still be there!
 
-
-
-# Use `hscan_iter` to iterate the field-values pairs in the index for the word `python`.
-# Print the URLs of the pages where this word appears and the number of times it appears on each page.
-
-
-
-# ## Shutdown
-#
-# If you are running this notebook on your own computer, you can use the following command to shut down the Redis server.
-#
-# If you are running on Colab, it's not really necessary: the Redis server will get shut down when the Colab runtime shuts down (and everything stored in it will disappear).
-
-# !killall redis-server
-
-# ## RedisToGo
-#
-# [RedisToGo](https://redistogo.com) is a hosting service that provides remote Redis databases.
-# They offer a free plan that includes a small database that is perfect for testing our indexer.
-#
-# If you sign up and go to your list of instances, you should find a URL that looks like this:
-#
-# ```
-# redis://redistogo:digitsandnumbers@dory.redistogo.com:10534/
-# ```
-#
-# If you pass this url to `Redis.from_url`, as described above, you should be able to connect to your database on RedisToGo and run your exercise solution again.
-#
-# And if you come back later and read the index, your data should still be there!
-
-# + [markdown] tags=[]
-# *Data Structures and Information Retrieval in Python*
-#
-# Copyright 2021 Allen Downey
-#
-# License: [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+    # + [markdown] tags=[]
+    # *Data Structures and Information Retrieval in Python*
+    #
+    # Copyright 2021 Allen Downey
+    #
+    # License: [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-nc-sa/4.0/)

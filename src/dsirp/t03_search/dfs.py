@@ -43,250 +43,228 @@ and they lived at the bottom of a well.</p>
 # + tags=[]
 from bs4 import BeautifulSoup
 
-soup = BeautifulSoup(html_doc)
-type(soup)
-# -
+if __name__ == "__main__":
+    soup = BeautifulSoup(html_doc)
+    type(soup)
+    # -
 
-# The result is a `BeautifulSoup` object that represents the root of the tree. If we display the soup, it reproduces the HTML.
+    # The result is a `BeautifulSoup` object that represents the root of the tree. If we display the soup, it reproduces the HTML.
 
-# + tags=[]
-soup
-# -
+    # + tags=[]
+    soup
+    # -
 
-# `prettify` uses indentation to show the structure of the document.
+    # `prettify` uses indentation to show the structure of the document.
 
-# + tags=[]
-print(soup.prettify())
-# -
+    # + tags=[]
+    print(soup.prettify())
+    # -
 
-# The `BeautifulSoup` object has a property called `children` that returns an iterator of the objects it contains.
+    # The `BeautifulSoup` object has a property called `children` that returns an iterator of the objects it contains.
 
-# + tags=[]
-soup.children
-# -
+    # + tags=[]
+    soup.children
+    # -
 
-# We can use a for loop to iterate through them.
+    # We can use a for loop to iterate through them.
 
-# + tags=[]
-for element in soup.children:
-    print(type(element))
-# -
+    # + tags=[]
+    for element in soup.children:
+        print(type(element))
+    # -
 
-# This soup contains only a single child, which is a `Tag`.
-#
-# `BeautifulSoup` also provides `contents`, which returns the children in the form of a list, which can be more convenient.
+    # This soup contains only a single child, which is a `Tag`.
+    #
+    # `BeautifulSoup` also provides `contents`, which returns the children in the form of a list, which can be more convenient.
 
-# + tags=[]
-soup.contents
-# -
+    # + tags=[]
+    soup.contents
+    # -
 
-# The only child is an HTML element that contains the whole document.
-# Let's get just this element:
+    # The only child is an HTML element that contains the whole document.
+    # Let's get just this element:
 
-# + tags=[]
-element = soup.contents[0]
-element
-# -
+    # + tags=[]
+    element = soup.contents[0]
+    element
+    # -
 
-# The type of the element is `Tag`:
+    # The type of the element is `Tag`:
 
-# + tags=[]
-type(element)
-# -
+    # + tags=[]
+    type(element)
+    # -
 
-# And the name of the tag is `html`.
+    # And the name of the tag is `html`.
 
-# + tags=[]
-element.name
-# -
+    # + tags=[]
+    element.name
+    # -
 
-# Now let's get the children of this top-level element:
+    # Now let's get the children of this top-level element:
 
-# + tags=[]
-children = element.contents
-children
-# -
+    # + tags=[]
+    children = element.contents
+    children
+    # -
 
-# There are three elements in this list, but it's hard to read because when you print an element, it prints all of the HTML.
-#
-# I'll use the following function to print elements in a simple form.
+    # There are three elements in this list, but it's hard to read because when you print an element, it prints all of the HTML.
+    #
+    # I'll use the following function to print elements in a simple form.
 
-# +
-from bs4 import Tag, NavigableString
-
-def print_element(element):
-    if isinstance(element, Tag):
-        print(f'{type(element).__name__}<{element.name}>')
-    if isinstance(element, NavigableString):
-        print(type(element).__name__)
+    # +
+    from bs4 import Tag, NavigableString
 
 
-# + tags=[]
-print_element(element)
+    def print_element(element):
+        if isinstance(element, Tag):
+            print(f'{type(element).__name__}<{element.name}>')
+        if isinstance(element, NavigableString):
+            print(type(element).__name__)
 
 
-# -
-
-# And the following function to print a list of elements.
-
-def print_element_list(element_list):
-    print('[')
-    for element in element_list:
-        print_element(element)
-    print(']')
+    # + tags=[]
+    print_element(element)
 
 
-# + tags=[]
-print_element_list(element.contents)
-# -
+    # -
 
-# Now let's try navigating the tree. I'll start with the first child of `element`.
+    # And the following function to print a list of elements.
 
-# + tags=[]
-child = element.contents[0]
-print_element(child)
-# -
-
-# And print its children.
-
-# + tags=[]
-print_element_list(child.contents)
-# -
-
-# Now let's get the first child of the first child.
-
-# + tags=[]
-grandchild = child.contents[0]
-print_element(grandchild)
-
-# + tags=[]
-grandchild = child.contents[0]
-print_element(grandchild)
-# -
-
-# And the first child of the first grandchild.
-
-greatgrandchild = grandchild.contents[0]
-print_element(greatgrandchild)
-
-try:
-    greatgrandchild.contents
-except AttributeError as e:
-    print('AttributeError:', e)
-
-greatgrandchild
+    def print_element_list(element_list):
+        print('[')
+        for element in element_list:
+            print_element(element)
+        print(']')
 
 
-# `NavigableString` has no children, so we've come to the end of the road.
-#
-# In order to continue, we would have to backtrack to the grandchild and select the second child.
-#
-# Which means we have to keep track of which elements we have seen, in order to pick up where we left off.
-#
-# That's what depth-first search does.
+    # + tags=[]
+    print_element_list(element.contents)
+    # -
 
-# ## Depth-first search
-#
-# DFS starts at the root of the tree and selects the first child. If the
-# child has children, it selects the first child again. When it gets to a
-# node with no children, it backtracks, moving up the tree to the parent
-# node, where it selects the next child if there is one; otherwise it
-# backtracks again. When it has explored the last child of the root, it's
-# done.
-#
-# There are two common ways to implement DFS, recursively and iteratively.
-# The recursive implementation looks like this:
+    # Now let's try navigating the tree. I'll start with the first child of `element`.
 
-# + tags=[]
-def recursive_DFS(element):
-    if isinstance(element, NavigableString):
-        print(element, end='')
-        return
+    # + tags=[]
+    child = element.contents[0]
+    print_element(child)
+    # -
 
-    for child in element.children:
-        recursive_DFS(child)
+    # And print its children.
+
+    # + tags=[]
+    print_element_list(child.contents)
+    # -
+
+    # Now let's get the first child of the first child.
+
+    # + tags=[]
+    grandchild = child.contents[0]
+    print_element(grandchild)
+
+    # + tags=[]
+    grandchild = child.contents[0]
+    print_element(grandchild)
+    # -
+
+    # And the first child of the first grandchild.
+
+    greatgrandchild = grandchild.contents[0]
+    print_element(greatgrandchild)
+
+    try:
+        greatgrandchild.contents
+    except AttributeError as e:
+        print('AttributeError:', e)
+
+    greatgrandchild
 
 
-# + tags=[]
-recursive_DFS(soup)
+    # `NavigableString` has no children, so we've come to the end of the road.
+    #
+    # In order to continue, we would have to backtrack to the grandchild and select the second child.
+    #
+    # Which means we have to keep track of which elements we have seen, in order to pick up where we left off.
+    #
+    # That's what depth-first search does.
 
+    # ## Depth-first search
+    #
+    # DFS starts at the root of the tree and selects the first child. If the
+    # child has children, it selects the first child again. When it gets to a
+    # node with no children, it backtracks, moving up the tree to the parent
+    # node, where it selects the next child if there is one; otherwise it
+    # backtracks again. When it has explored the last child of the root, it's
+    # done.
+    #
+    # There are two common ways to implement DFS, recursively and iteratively.
+    # The recursive implementation looks like this:
 
-# -
-
-# Here is an iterative version of DFS that uses a list to represent a stack of elements:
-
-# + tags=[]
-def iterative_DFS(root):
-    stack = [root]
-    
-    while(stack):
-        element = stack.pop()
+    # + tags=[]
+    def recursive_DFS(element):
         if isinstance(element, NavigableString):
             print(element, end='')
-        else:
-            children = reversed(element.contents)
-            stack.extend(children)
+            return
+
+        for child in element.children:
+            recursive_DFS(child)
 
 
-# -
-
-# The parameter, `root`, is the root of the tree we want to traverse, so
-# we start by creating the stack and pushing the root onto it.
-#
-# The loop continues until the stack is empty. Each time through, it pops
-# a `PageElement` off the stack. If it gets a `NavigableString`, it prints the contents.
-# Then it pushes the children onto the stack. In order to process the
-# children in the right order, we have to push them onto the stack in
-# reverse order.
-#
-
-# + tags=[]
-iterative_DFS(soup)
+    # + tags=[]
+    recursive_DFS(soup)
 
 
-# -
+    # -
 
-# **Exercise:** Write a function similar to `PageElement.find` that takes a `PageElement` and a tag name and returns the first tag with the given name. You can write it iteratively or recursively.
-#
-# Here's how to check whether a `PageElement` is a `Tag`.
-#
-# ```
-# from bs4 import Tag
-# isinstance(element, Tag)
-# ```
+    # Here is an iterative version of DFS that uses a list to represent a stack of elements:
 
-def is_right_tag(element, tag_name):
-    return (isinstance(element, Tag) and 
-            element.name == tag_name)
+    # + tags=[]
+    def iterative_DFS(root):
+        stack = [root]
 
-
-
+        while (stack):
+            element = stack.pop()
+            if isinstance(element, NavigableString):
+                print(element, end='')
+            else:
+                children = reversed(element.contents)
+                stack.extend(children)
 
 
+    # -
+
+    # The parameter, `root`, is the root of the tree we want to traverse, so
+    # we start by creating the stack and pushing the root onto it.
+    #
+    # The loop continues until the stack is empty. Each time through, it pops
+    # a `PageElement` off the stack. If it gets a `NavigableString`, it prints the contents.
+    # Then it pushes the children onto the stack. In order to process the
+    # children in the right order, we have to push them onto the stack in
+    # reverse order.
+    #
+
+    # + tags=[]
+    iterative_DFS(soup)
 
 
+    # -
 
+    # **Exercise:** Write a function similar to `PageElement.find` that takes a `PageElement` and a tag name and returns the first tag with the given name. You can write it iteratively or recursively.
+    #
+    # Here's how to check whether a `PageElement` is a `Tag`.
+    #
+    # ```
+    # from bs4 import Tag
+    # isinstance(element, Tag)
+    # ```
 
+    def is_right_tag(element, tag_name):
+        return (isinstance(element, Tag) and
+                element.name == tag_name)
 
+    # **Exercise:** Write a generator function similar to `PageElement.find_all` that takes a `PageElement` and a tag name and yields all tags with the given name. You can write it iteratively or recursively.
 
-
-
-
-
-# **Exercise:** Write a generator function similar to `PageElement.find_all` that takes a `PageElement` and a tag name and yields all tags with the given name. You can write it iteratively or recursively.
-
-
-
-
-
-
-
-
-
-
-
-# *Data Structures and Information Retrieval in Python*
-#
-# Copyright 2021 Allen Downey
-#
-# License: [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+    # *Data Structures and Information Retrieval in Python*
+    #
+    # Copyright 2021 Allen Downey
+    #
+    # License: [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-nc-sa/4.0/)
