@@ -38,6 +38,9 @@
 # To implement merge sort, I think it's helpful to start with a non-recursive version that uses the Python `sort` function to sort the sub-sequences.
 
 # + tags=[]
+from dsirp.helper_library.download import download
+
+
 def merge_sort_norec(xs):
     n = len(xs)
     mid = n // 2
@@ -190,12 +193,6 @@ if __name__ == "__main__":
     from os.path import basename, exists
 
 
-    def download(url):
-        filename = basename(url)
-        if not exists(filename):
-            from urllib.request import urlretrieve
-            local, _ = urlretrieve(url, filename)
-            print('Downloaded ' + local)
 
 
     download('https://github.com/AllenDowney/DSIRP/raw/main/timing.py')

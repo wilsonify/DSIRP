@@ -22,6 +22,9 @@
 # Here's an example of recursion from [this section of Think Python](https://greenteapress.com/thinkpython2/html/thinkpython2006.html#sec62).
 
 # + tags=[]
+from dsirp.helper_library.download import download
+
+
 def countdown(n):
     if n == 0:
         print('Blastoff!')
@@ -254,12 +257,6 @@ if __name__ == "__main__":
     from os.path import basename, exists
 
 
-    def download(url):
-        filename = basename(url)
-        if not exists(filename):
-            from urllib.request import urlretrieve
-            local, _ = urlretrieve(url, filename)
-            print('Downloaded ' + local)
 
 
     download('https://github.com/AllenDowney/DSIRP/raw/main/american-english')

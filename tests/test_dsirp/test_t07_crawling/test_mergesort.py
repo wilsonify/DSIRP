@@ -5,6 +5,7 @@ def test_smoke():
     print("fire?")
     print(dir(mergesort))
 
+
 def test_main():
     # # Merge Sort
 
@@ -177,16 +178,8 @@ def test_main():
     #
 
     # +
-    from os.path import basename, exists
 
-    def download(url):
-        filename = basename(url)
-        if not exists(filename):
-            from urllib.request import urlretrieve
-            local, _ = urlretrieve(url, filename)
-            print('Downloaded ' + local)
-
-    #download('https://github.com/AllenDowney/DSIRP/raw/main/timing.py')
+    # download('https://github.com/AllenDowney/DSIRP/raw/main/timing.py')
     # -
 
     from timing import run_timing_test, plot_timing_test

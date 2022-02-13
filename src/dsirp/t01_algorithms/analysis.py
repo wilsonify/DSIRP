@@ -80,9 +80,18 @@
 #
 # The following table shows the run time of these algorithms for different problem sizes:
 
-# +
+import matplotlib.pyplot as plt
+
 import numpy as np
 import pandas as pd
+
+
+def compute_sum(t):
+    total = 0
+    for x in t:
+        total += x
+    return total
+
 
 if __name__ == "__main__":
     n = np.array([10, 100, 1000, 10000])
@@ -112,8 +121,6 @@ if __name__ == "__main__":
     # B for sufficiently large $n$.
 
     # +
-    import numpy as np
-    import pandas as pd
 
     n = np.array([10, 100, 1000, 10000])
     table = pd.DataFrame(index=n)
@@ -131,7 +138,6 @@ if __name__ == "__main__":
     # In the figure, we can see where the crossover points are.
 
     # +
-    import matplotlib.pyplot as plt
 
     ns = np.arange(10, 1500)
     ys = 100 * ns + 1
@@ -147,7 +153,6 @@ if __name__ == "__main__":
     plt.xlabel('Problem size (n)')
     plt.ylabel('Run time')
     plt.legend();
-
 
     # -
 
@@ -235,13 +240,6 @@ if __name__ == "__main__":
     # In Python, most arithmetic operations are constant time; multiplication usually takes longer than addition and subtraction, and division takes even longer, but these run times don't depend on the magnitude of the operands. Very large integers are an exception; in that case the run time increases with the number of digits.
     #
     # A `for` loop that iterates a list is linear, as long as all of the operations in the body of the loop are constant time. For example, adding up the elements of a list is linear:
-
-    def compute_sum(t):
-        total = 0
-        for x in t:
-            total += x
-        return total
-
 
     t = range(10)
     compute_sum(t)

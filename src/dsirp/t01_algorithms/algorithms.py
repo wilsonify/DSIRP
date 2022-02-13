@@ -17,6 +17,8 @@
 from os.path import basename, exists
 from urllib.request import urlretrieve
 
+from dsirp.helper_library.download import download
+
 
 def is_anagram(word1, word2):
     return False
@@ -26,11 +28,6 @@ def all_anagram_pairs(word_list):
     return []
 
 
-def download(url):
-    filename = basename(url)
-    if not exists(filename):
-        local, _ = urlretrieve(url, filename)
-        print('Downloaded ' + local)
 
 
 def read_words(filename):

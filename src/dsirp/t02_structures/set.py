@@ -19,6 +19,8 @@
 # ## Set operators and methods
 #
 # The following example is based on Luciano Ramalho's talk, [Set Practice: Learning from Python's set type](https://www.youtube.com/watch?v=tGAngdU_8D8).
+from dsirp.helper_library.download import download
+
 
 def fibonacci(stop):
     a, b = 0, 1
@@ -189,12 +191,6 @@ if __name__ == "__main__":
     from os.path import basename, exists
 
 
-    def download(url):
-        filename = basename(url)
-        if not exists(filename):
-            from urllib.request import urlretrieve
-            local, _ = urlretrieve(url, filename)
-            print('Downloaded ' + local)
 
 
     download('https://github.com/AllenDowney/DSIRP/raw/main/american-english')

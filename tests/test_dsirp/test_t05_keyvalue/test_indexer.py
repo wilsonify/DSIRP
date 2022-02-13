@@ -12,15 +12,7 @@ def test_main():
     # [Click here to run this chapter on Colab](https://colab.research.google.com/github/AllenDowney/DSIRP/blob/main/notebooks/indexer.ipynb)
 
     # + tags=[]
-    from os.path import basename, exists
-
-    def download(url):
-        filename = basename(url)
-        if not exists(filename):
-            from urllib.request import urlretrieve
-            local, _ = urlretrieve(url, filename)
-            print('Downloaded ' + local)
-        return filename
+    from os.path import basename
 
     # -
 

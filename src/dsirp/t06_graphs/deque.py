@@ -33,6 +33,8 @@
 # One way to implement a deque is a doubly-linked list, also known as a "head-tail linked list".
 # Each node in a doubly-linked list has a reference to the previous node in the list as well as the next element, which I will call `left` and `right`.
 #
+from dsirp.helper_library.download import download
+
 
 class Node:
     def __init__(self, data, left=None, right=None):
@@ -267,12 +269,6 @@ if __name__ == "__main__":
     from os.path import basename, exists
 
 
-    def download(url):
-        filename = basename(url)
-        if not exists(filename):
-            from urllib.request import urlretrieve
-            local, _ = urlretrieve(url, filename)
-            print('Downloaded ' + local)
 
 
     download('https://github.com/AllenDowney/DSIRP/raw/main/timing.py')

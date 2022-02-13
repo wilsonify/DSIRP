@@ -35,41 +35,42 @@
 # +
 from os.path import basename, exists
 
+from dsirp.helper_library.download import download
 
-def download(url):
-    filename = basename(url)
-    if not exists(filename):
-        from urllib.request import urlretrieve
-        local, _ = urlretrieve(url, filename)
-        print('Downloaded ' + local)
+
+def is_alphabetical(word):
+    return list(word) == sorted(word)
+
+
+def read_words(filename):
+    """Read lines from a file and split them into words."""
+    res = set()
+    for line in open(filename):
+        for word in line.split():
+            res.add(word.strip().lower())
+    return res
+
+
+def encompasses():
+    """
+    takes two words and returns `True` if the first word contains the second word,
+    but not at the beginning or the end (and `False` otherwise).
+    For example, `hippopotomus` encompasses the word `pot`.
+    """
+    return True
 
 
 if __name__ == "__main__":
     download('https://github.com/AllenDowney/DSIRP/raw/main/american-english')
 
-
     # -
-
-    def read_words(filename):
-        """Read lines from a file and split them into words."""
-        res = set()
-        for line in open(filename):
-            for word in line.split():
-                res.add(word.strip().lower())
-        return res
-
 
     word_list = read_words('american-english')
     len(word_list)
 
-
     # ## Question 1
     #
     # The following function takes a string and returns `True` if the letters in the string appear in alphabetical order.
-
-    def is_alphabetical(word):
-        return list(word) == sorted(word)
-
 
     is_alphabetical('almost')  # True
 
@@ -93,15 +94,6 @@ if __name__ == "__main__":
     'hippopotomus'.find('pot')
 
     'hippopotomus'.find('potato')
-
-    def encompasses():
-        """
-        takes two words and returns `True` if the first word contains the second word,
-        but not at the beginning or the end (and `False` otherwise).
-        For example, `hippopotomus` encompasses the word `pot`.
-        """
-        return True
-
 
     # You can use the following examples to test your function.
 

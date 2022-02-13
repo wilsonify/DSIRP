@@ -33,14 +33,7 @@
 # +
 from os.path import basename, exists
 
-
-def download(url):
-    filename = basename(url)
-    if not exists(filename):
-        from urllib.request import urlretrieve
-        local, _ = urlretrieve(url, filename)
-        print('Downloaded ' + local)
-
+from dsirp.helper_library.download import download
 
 if __name__ == "__main__":
     download('https://github.com/AllenDowney/DSIRP/raw/main/american-english')

@@ -28,6 +28,7 @@
 # We'll use the `urllib` library to download Wikipedia pages and BeautifulSoup to parse HTML text and navigate the Document Object Model (DOM).
 
 # Before we start working with Wikipedia pages, let's warm up with a minimal HTML document, which I've adapted from the BeautifulSoup documentation.
+from dsirp.helper_library.download import download
 
 html_doc = """
 <html><head><title>The Dormouse's story</title></head>
@@ -166,12 +167,6 @@ if __name__ == "__main__":
     from os.path import basename, exists
 
 
-    def download(url):
-        filename = basename(url)
-        if not exists(filename):
-            from urllib.request import urlretrieve
-            local, _ = urlretrieve(url, filename)
-            print('Downloaded ' + local)
 
 
     # -

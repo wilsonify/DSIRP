@@ -38,7 +38,6 @@ def test_main():
         def __repr__(self):
             return f'Node({self.data})'
 
-
     # We can create nodes like this:
 
     # + tags=[]
@@ -73,7 +72,6 @@ def test_main():
         print(node)
         node = node.left
 
-
     # ## Deque objects
     #
     # For some operations, it will be convenient to have another object that represents the whole list (as opposed to one of its nodes).
@@ -88,13 +86,11 @@ def test_main():
         def __repr__(self):
             return f'LinkedList({self.head}, {self.tail})'
 
-
     # Now we can create a `Deque` with references to `node1` and `node3`:
 
     # + tags=[]
     deque = Deque(node1, node3)
     deque
-
 
     # -
 
@@ -113,11 +109,9 @@ def test_main():
             node = node.left
         print()
 
-
     # Here's an example.
 
     print_deque(deque)
-
 
     # ## Push
     #
@@ -129,7 +123,6 @@ def test_main():
     # + tags=[]
     def push_first(deque, value):
         deque.head = deque.tail = Node(value, None, None)
-
 
     # -
 
@@ -145,8 +138,6 @@ def test_main():
     #
     # If the queue is empty, it should call `push_first` to handle the special case; otherwise it should handle the general case.
 
-
-
     # You can use the following examples to test your function:
 
     deque = Deque()
@@ -160,8 +151,6 @@ def test_main():
     #
     # If the queue is empty, it should call `push_first` to handle the special case; otherwise it should handle the general case.
 
-
-
     # You can use the following examples to test your function:
 
     deque = Deque()
@@ -170,7 +159,6 @@ def test_main():
 
     right_push(deque, 4)
     print_deque(deque)
-
 
     # ## Pop
     #
@@ -191,7 +179,6 @@ def test_main():
         deque.head = deque.tail = None
         return old_head.data
 
-
     # -
 
     # We can test it like this:
@@ -208,8 +195,6 @@ def test_main():
     # **Exercise:**  Write `left_pop`, which takes a `Deque` object, remove the first node, and return the first data value.
     #
     # If the queue is empty or has a single element, it should call `pop_last` to handle the special case; otherwise it should handle the general case.
-
-
 
     # You can use the following example to test your code.
 
@@ -234,8 +219,6 @@ def test_main():
     # **Exercise:**  Write `right_pop`, which takes a `Deque` object, remove the last node, and return the last data value.
     #
     # If the queue is empty or has a single element, it should call `pop_last` to handle the special case; otherwise it should handle the general case.
-
-
 
     # You can use the following examples to test your function.
 
@@ -266,16 +249,8 @@ def test_main():
     # To confirm that it can add and remove elements from the beginning and end in constant time, let's run some timing tests.
 
     # +
-    from os.path import basename, exists
 
-    def download(url):
-        filename = basename(url)
-        if not exists(filename):
-            from urllib.request import urlretrieve
-            local, _ = urlretrieve(url, filename)
-            print('Downloaded ' + local)
-
-    #download('https://github.com/AllenDowney/DSIRP/raw/main/timing.py')
+    # download('https://github.com/AllenDowney/DSIRP/raw/main/timing.py')
 
     # +
     from collections import deque
@@ -284,7 +259,6 @@ def test_main():
         d = deque()
         [d.appendleft(x) for x in range(n)]
 
-
     # -
 
     def popleft(n):
@@ -292,19 +266,16 @@ def test_main():
         [d.appendleft(x) for x in range(n)]
         [d.popleft() for _ in range(n)]
 
-
     # +
     from timing import run_timing_test
 
     ns, ts = run_timing_test(appendleft)
-
 
     # -
 
     def append(n):
         d = deque()
         [d.append(x) for x in range(n)]
-
 
     # +
     from timing import plot_timing_test

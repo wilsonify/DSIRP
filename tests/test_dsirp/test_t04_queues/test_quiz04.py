@@ -1,3 +1,4 @@
+from dsirp.helper_library.download import download
 from dsirp.t04_queues import quiz04
 
 
@@ -28,12 +29,6 @@ def test_main():
     # +
     from os.path import basename, exists
 
-    def download(url):
-        filename = basename(url)
-        if not exists(filename):
-            from urllib.request import urlretrieve
-            local, _ = urlretrieve(url, filename)
-            print('Downloaded ' + local)
 
     download('https://github.com/AllenDowney/DSIRP/raw/main/american-english')
 
