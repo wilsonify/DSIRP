@@ -89,22 +89,14 @@ import sys
 
 IN_COLAB = 'google.colab' in sys.modules
 
-if IN_COLAB:
-    # !pip install redis-server
-    # !/usr/local/lib/python*/dist-packages/redis_server/bin/redis-server --daemonize yes
-else:
-    # !redis-server --daemonize yes
-# -
+# redis-server --daemonize yes
 
 # ## redis-py
 #
 # To talk to the Redis server, we'll use [redis-py](https://redis-py.readthedocs.io/en/stable/index.html).
 # Here's how we use it to connect to the Redis server.
 
-try:
-    import redis
-except ImportError:
-    # !pip install redis
+import redis
 
 # + tags=[]
 import redis

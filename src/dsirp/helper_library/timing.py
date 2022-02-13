@@ -83,7 +83,7 @@ def list_append(n):
 
 # `timeit` can time this function accurately.
 
-# %timeit list_append(10000)
+list_append(10000)
 
 # But our `time_func` is not that smart.
 

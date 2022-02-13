@@ -7,16 +7,20 @@
 #       format_version: '1.5'
 #       jupytext_version: 1.11.1
 #   kernelspec:
-#     display_name: Python 3 (ipykernel)
+#     display_name: Python 3
 #     language: python
 #     name: python3
 # ---
 
 # # Graphs
 
+# *Data Structures and Information Retrieval in Python*
+#
+# Copyright 2021 Allen Downey
+#
 # This notebook is adapted from Chapter 2 of [Think Complexity](https://greenteapress.com/wp/think-complexity-2e/).
 #
-# [Click here to run this chapter on Colab](https://colab.research.google.com/github/AllenDowney/DSIRP/blob/main/notebooks/graph.ipynb)
+# License: [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 
 # ## Graph
 #
@@ -28,7 +32,7 @@
 #
 # Here's how we make a graph and add nodes. 
 
-# + tags=[]
+# +
 import networkx as nx
 
 G = nx.Graph()
@@ -42,13 +46,10 @@ list(G.nodes())
 #
 # Here's how we add edges between nodes. 
 
-# + tags=[]
 G.add_edge('Alice', 'Bob')
 G.add_edge('Alice', 'Carol', type='enemy')
 list(G.edges())
 
-
-# -
 
 # Optionally, you can provide attributes that are associated with the edge.
 # In this example, the second edge has an attribute called `type` that indicates the nature of the relationship.
@@ -60,14 +61,15 @@ def draw_graph(G):
     nx.draw_circular(G, node_size=1500, with_labels=True)
 
 
-# + tags=[]
-draw_graph(G)
 # -
+
+draw_graph(G)
 
 # **Exercise:**  Suppose Alice introduces Bob and Carol, and they become frenemies. Update the social network by adding an edge between Bob and Carol with an appropriate attribute, then draw the graph  again.
 
 # + jupyter={"outputs_hidden": true}
-
+G.add_edge('Bob', 'Carol', type='frenemy')
+draw_graph(G)
 # -
 
 # ## Graph Representation
@@ -76,20 +78,20 @@ draw_graph(G)
 #
 # If we select an element from the top-level dictionary, the result is a dictionary-like object.
 
-# + jupyter={"outputs_hidden": true} tags=[]
+# + jupyter={"outputs_hidden": true}
 G['Alice']
 # -
 
 # So we can iterate through the neighbors of a node like this:
 
-# + jupyter={"outputs_hidden": true} tags=[]
+# + jupyter={"outputs_hidden": true}
 for neighbor in G['Alice']:
     print(neighbor)
 # -
 
 # Or enumerate the neighbors and edges like this:
 
-# + jupyter={"outputs_hidden": true} tags=[]
+# + jupyter={"outputs_hidden": true}
 for key, value in G['Alice'].items():
     print(key, value)
 # -
@@ -98,7 +100,7 @@ for key, value in G['Alice'].items():
 #
 # We can select an edge like this:
 
-# + jupyter={"outputs_hidden": true} tags=[]
+# + jupyter={"outputs_hidden": true}
 G['Alice']['Carol']
 
 
@@ -106,18 +108,18 @@ G['Alice']['Carol']
 
 # To check whether there is an edge from one node to another, we can use the `in` operator:
 
-# + jupyter={"outputs_hidden": true} tags=[]
+# + jupyter={"outputs_hidden": true}
 def has_edge(G, u, v):
     return v in G[u]
 
 
-# + jupyter={"outputs_hidden": true} tags=[]
+# + jupyter={"outputs_hidden": true}
 has_edge(G, 'Alice', 'Bob')
 # -
 
 # But there's a method that does the same thing.
 
-# + jupyter={"outputs_hidden": true} tags=[]
+# + jupyter={"outputs_hidden": true}
 G.has_edge('Alice', 'Bob')
 
 
@@ -128,7 +130,7 @@ G.has_edge('Alice', 'Bob')
 # In a complete graph, all nodes are connected to each other.
 # To make a complete graph, we'll use the following generator function, iterates through all pairs of nodes.
 
-# + jupyter={"outputs_hidden": true} tags=[]
+# + jupyter={"outputs_hidden": true}
 def all_pairs(nodes):
     for i, u in enumerate(nodes):
         for j, v in enumerate(nodes):
@@ -140,7 +142,7 @@ def all_pairs(nodes):
 
 # Here's a complete graph with 10 nodes:
 
-# + jupyter={"outputs_hidden": true} tags=[]
+# + jupyter={"outputs_hidden": true}
 def make_complete_graph(n):
     nodes = range(n)
     G = nx.Graph()
@@ -149,9 +151,9 @@ def make_complete_graph(n):
     return G
 
 
-# + tags=[]
-complete = make_complete_graph(10)
 # -
+
+complete = make_complete_graph(10)
 
 # And here's what it looks like.
 
@@ -177,32 +179,19 @@ def flip(p):
 # `random_pairs` is a generator function that enumerates all possible pairs of nodes and yields each one with probability `p` 
 
 # + jupyter={"outputs_hidden": true} tags=[]
-def random_pairs(nodes, p):
-    for edge in all_pairs(nodes):
-        if flip(p):
-            yield edge
-
 
 # -
 
 # `make_random_graph` makes an ER graph where the probability of an edge between each pair of nodes is `p`.
 
-# + jupyter={"outputs_hidden": true}
-def make_random_graph(n, p):
-    nodes = range(n)
-    G = nx.Graph()
-    G.add_nodes_from(nodes)
-    G.add_edges_from(random_pairs(nodes, p))
-    return G
-
+# + jupyter={"outputs_hidden": true} tags=[]
 
 # -
 
 # Here's an example with `n=10` and `p=0.3`
 
 # + jupyter={"outputs_hidden": true} tags=[]
-random_graph = make_random_graph(10, 0.3)
-len(random_graph.edges())
+
 # -
 
 # And here's what it looks like:
@@ -220,7 +209,7 @@ draw_graph(random_graph)
 # To check whether a graph is connected, we'll use a version of a depth-first search.
 # First, let's see what goes wrong with a basic DFS; then we'll fix the problem.
 
-# + jupyter={"outputs_hidden": true} tags=[]
+# + jupyter={"outputs_hidden": true}
 def basic_dfs(G, start):
     stack = [start]
     
@@ -231,12 +220,12 @@ def basic_dfs(G, start):
 
 
 # + jupyter={"outputs_hidden": true} tags=[]
-# basic_dfs(random_graph, 0)
+
 # -
 
 # For most graphs, the basic version of DFS runs forever, because it visits the same nodes over and over.
 # The solution is to keep track of the nodes we've seen and avoid visiting them more than once.
-#
+
 # **Exercise:** Write a function called `reachable_nodes` that takes a graph and a starting node, uses DFS to find all nodes that can be reached from the starting node, and returns a collection that contains them.
 #
 # Hint: Think about what kind of collection to use.
@@ -255,18 +244,11 @@ reachable_nodes(complete, 0)
 
 # + jupyter={"outputs_hidden": true}
 reachable_nodes(random_graph, 0)
-
-
 # -
 
 # So we can use `reachable_nodes` to check whether a graph is connected:
 
 # + jupyter={"outputs_hidden": true} tags=[]
-def is_connected(G):
-    start = next(iter(G))
-    reachable = reachable_nodes(G, start)
-    return len(reachable) == len(G)
-
 
 # -
 
@@ -365,16 +347,13 @@ plt.xscale('log')
 complete = make_complete_graph(100)
 
 # + jupyter={"outputs_hidden": true}
-# %timeit len(reachable_nodes(complete, 0))
+len(reachable_nodes(complete, 0))
 
 # + jupyter={"outputs_hidden": true}
-# %timeit len(reachable_nodes_precheck(complete, 0))
+len(reachable_nodes_precheck(complete, 0))
 # -
 
 # How does the performance of the two methods compare for larger values of `n`?
 
-# *Data Structures and Information Retrieval in Python*
-#
-# Copyright 2021 Allen Downey
-#
-# License: [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+# + jupyter={"outputs_hidden": true}
+

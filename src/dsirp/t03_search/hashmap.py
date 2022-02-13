@@ -390,9 +390,9 @@ def is_anagram2(word1, word2):
 def is_anagram3(word1, word2):
     return sorted(word1) == sorted(word2)
 
-# %timeit is_anagram2('tachymetric', 'mccarthyite')
+is_anagram2('tachymetric', 'mccarthyite')
 
-# %timeit is_anagram3('tachymetric', 'mccarthyite')
+is_anagram3('tachymetric', 'mccarthyite')
 
 
 

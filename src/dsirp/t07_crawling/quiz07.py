@@ -81,7 +81,7 @@ f_memo(10, 5)
 # And use this one to confirm that it is faster.
 # It should take less than a second, and the result should be `100891344545564193334812497256`.
 
-# %time f_memo(100, 50)
+f_memo(100, 50)
 
 # ## LetterSet
 #

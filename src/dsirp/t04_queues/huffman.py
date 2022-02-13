@@ -132,7 +132,7 @@ root
 # But we'll start by iterating through the `Counter` and making a list of `Node` objects, 
 
 # + tags=[]
-nodes = [Node(count, letter, None, None) 
+nodes = [Node(count, letter, None, None)
          for (letter, count) in c.items()]
 nodes
 # -
@@ -151,7 +151,11 @@ heap
 #
 # **Exercise:** Write a function called `make_tree` that takes a heap of `Node` objects and uses the algorithm I described to make and return a Huffman tree. In other words, it should join up the nodes into a tree and return the root node.
 
-
+def make_tree(heap_of_nodes):
+    """
+    takes a heap of `Node` objects and returns a Huffman tree.
+    In other words, it should join up the nodes into a tree and return the root node.
+    """
 
 # Use this code to test it.
 
@@ -163,10 +167,7 @@ tree = make_tree(heap)
 #
 # To see what it looks like, we'll use NetworkX and a library called EoN.
 
-try:
-    import EoN
-except ImportError:
-    # !pip install EoN
+import EoN
 
 # The following function traverses the Huffman tree and makes a NetworkX `DiGraph`.
 
@@ -177,7 +178,7 @@ def add_edges(parent, G):
     """Make a NetworkX graph that represents the tree."""
     if parent is None:
         return
-    
+
     for child in (parent.left, parent.right):
         if child:
             G.add_edge(parent, child)
@@ -195,12 +196,12 @@ add_edges(tree, G)
 def get_labels(parent, labels):
     if parent is None:
         return
-    
+
     if parent.letter == '\0':
         labels[parent] = parent.count
     else:
         labels[parent] = parent.letter
-        
+
     get_labels(parent.left, labels)
     get_labels(parent.right, labels)
 
@@ -212,11 +213,11 @@ get_labels(tree, labels)
 def get_edge_labels(parent, edge_labels):
     if parent is None:
         return
-    
+
     if parent.left:
         edge_labels[parent, parent.left] = '0'
         get_edge_labels(parent.left, edge_labels)
-        
+
     if parent.right:
         edge_labels[parent, parent.right] = '1'
         get_edge_labels(parent.right, edge_labels)
@@ -263,11 +264,11 @@ def is_leaf(node):
 def make_table(node, path, table):
     if node is None:
         return
-    
+
     if is_leaf(node):
         table[node.letter] = path
         return
-    
+
     make_table(node.left, path+'0', table)
     make_table(node.right, path+'1', table)
 
@@ -307,7 +308,12 @@ code
 #
 # **Exercise:** Write a function called `decode` that takes as parameters a string on 0s and 1s and a Huffman tree. It should decode the message and return it as a string.
 
-
+def decode(code_str,hufftree):
+    """
+    takes a string of 0s and 1s and a Huffman tree.
+    decode the message and return it as a string.
+    """
+    return ''
 
 decode(code, tree)
 

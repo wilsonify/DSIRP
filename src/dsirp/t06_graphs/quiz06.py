@@ -46,7 +46,7 @@ class Node:
     def __init__(self):
         self.children = [None, None, None, None]
         self.end = False
-        
+
     def __repr__(self):
         return f'Node({self.end}, {self.children})'
 
@@ -104,15 +104,11 @@ tree = Node()
 for sequence in ['ACGT', 'ACAT', 'CAT', 'CATATTAC']:
     insert(tree, sequence)
 
-# I'll use NetworkX and EoN to draw this tree. 
-
-try:
-    import EoN
-except ImportError:
-    # !pip install EoN
+# I'll use NetworkX and EoN to draw this tree.
 
 # +
 import networkx as nx
+
 
 def add_edges(parent, G):
     """Traverse the tree and add edges to G."""
@@ -134,7 +130,7 @@ def get_labels(parent, labels):
         labels[parent] = '*'
     else:
         labels[parent] = ''
-        
+
     for child in parent.children:
         if child:
             get_labels(child, labels)
@@ -152,6 +148,7 @@ def get_edge_labels(parent, edge_labels):
 # +
 from EoN import hierarchy_pos
 
+
 def draw_tree(tree):
     G = nx.DiGraph()
     add_edges(tree, G)
@@ -161,14 +158,15 @@ def draw_tree(tree):
     edge_labels = {}
     get_edge_labels(tree, edge_labels)
     nx.draw(G, pos, labels=labels, alpha=0.4)
-    nx.draw_networkx_edge_labels(G, pos, 
-                                 edge_labels=edge_labels, 
+    nx.draw_networkx_edge_labels(G, pos,
+                                 edge_labels=edge_labels,
                                  font_color='C1')
 
 
 # -
 
 draw_tree(tree)
+
 
 # ## Question 1
 #
@@ -180,17 +178,25 @@ draw_tree(tree)
 #
 # It should return `True` if the sequence appears in the tree, and `False` otherwise.
 
+def find():
+    """
+    takes
+    * A `Node` that represents the root of a tree and
+    * A string representing a sequence of bases.
+    return `True` if the sequence appears in the tree, and `False` otherwise.
+    """
+    return True
 
 
 # You can use the following examples to test your code:
 
 find(tree, 'CAT')  # should be True
 
-find(tree, 'ACAT') # should be True
+find(tree, 'ACAT')  # should be True
 
-find(tree, 'TAG') # should be False
+find(tree, 'TAG')  # should be False
 
-find(tree, 'CA') # should be False
+find(tree, 'CA')  # should be False
 
 # ## Question 2
 #
@@ -205,7 +211,6 @@ find(tree, 'CA') # should be False
 # This function should traverse the tree and add to the list all of the complete sequences it discovers.
 #
 # Hint: Review `make_table` from `huffman.ipynb`.
-
 
 
 # You can use the following example to test your code.
@@ -228,14 +233,13 @@ t
 # Note: You can use `find_all_rec` as part of your solution even if your answer to the previous question does not work.
 
 
-
 # You can use the following examples to test your code.
 
-find_all(tree, 'CA')   # Should return ['CAT', 'CATATTAC']
+find_all(tree, 'CA')  # Should return ['CAT', 'CATATTAC']
 
-find_all(tree, 'A')    # Should return ['ACAT', 'ACGT']
+find_all(tree, 'A')  # Should return ['ACAT', 'ACGT']
 
-find_all(tree, '')     # Should return all sequences in the tree
+find_all(tree, '')  # Should return all sequences in the tree
 
 
 # ## Question 4
@@ -247,7 +251,7 @@ class BadNode:
     def __init__(self, end=True, children=[None, None, None, None]):
         self.children = children
         self.end = end
-        
+
     def __repr__(self):
         return f'Node({self.end}, {self.children})'
 
@@ -288,5 +292,3 @@ draw_tree(tree2)
 # Copyright 2021 Allen Downey
 #
 # License: [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-nc-sa/4.0/)
-
-

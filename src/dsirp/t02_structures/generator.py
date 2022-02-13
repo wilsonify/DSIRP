@@ -34,28 +34,22 @@ ranks = u'AKQJ⑽98765432'
 # And here's a nested for loop that enumerates all pairings of a rank with a suit.
 
 
-
 # This set of pairs is the [Cartesian product](https://en.wikipedia.org/wiki/Cartesian_product) of the set of ranks and the set of suits.
 #
 # The following function encapsulates the loops and uses the `yield` statement to generate a stream of cards.
 
 
-
 # Because this function includes a `yield` statement, it is a generator function. When we call it, the return value is a generator object.
 
 
-
 # The generator object is iterable, so we can use `next` to get the first element of the stream.
-
 
 
 # The first time we call `next`, the function runs until it hits the `yield` statement.
 # If we call `next` again, the function resumes from where it left off and runs until it hits the `yield` statement again. 
 
 
-
 # Because `it` is iterable, we can use it in a for loop to enumerate the remaining pairs.
-
 
 
 # When the flow of control reaches the end of the function, the generator object raises and exception, which causes the for loop to end.
@@ -68,11 +62,7 @@ ranks = u'AKQJ⑽98765432'
 # Here's a loop that uses `itertools.product` to generate the playing cards again.
 
 
-
 # **Exercise:** Encapsulate the previous loop in a generator function called `card_generator2` that yields the playing  cards. Then call your function and use it to print the cards.
-
-
-
 
 
 # ## Enumerating all pairs
@@ -82,14 +72,11 @@ ranks = u'AKQJ⑽98765432'
 # First, I'll create two card generators.
 
 
-
 # Now we can use `product` to generate all pairs of cards.
-
 
 
 # To check whether it's working correctly, it will be useful to count the number of elements in an iterator, which is what `ilen` does.
 # This idiom is discussed [on Stack Overflow](https://stackoverflow.com/questions/390852/is-there-any-built-in-way-to-get-the-length-of-an-iterable-in-python).
-
 
 
 # Now we can use it to count the pairs of cards.
@@ -100,7 +87,7 @@ ilen(product(it1, it2))
 
 # If things have gone according to plan, the number of pairs should be $52^2$.
 
-52**2
+52 ** 2
 
 # Notice that we have to create new card iterators every time, because once they are used up, they behave like an empty list.
 # Here's what happens if we try to use them again.
@@ -125,22 +112,13 @@ ilen(product(it, repeat=2))
 # One way to solve this problem is to generate all pairs and then eliminate the ones that contain duplicates.
 
 
-
 # **Exercise:** Write a generator function called `permutations` that takes an iterator and and integer, `r`, as arguments. It should generate tuples that represent all subsets of the elements in the iterator with size `r` and no duplicates.
 #
 # Test your function by generating and printing all hands with two distinct cards.
 # Then use `ilen` to count how many there are, and confirm that it's `52 * 51`.
 
 
-
-
-
-
-
-
-
 # The `itertools` library provides a function called `permutations` that does the same thing.
-
 
 
 # ## Combinations
@@ -155,22 +133,13 @@ ilen(product(it, repeat=2))
 # That's what the following loop does.
 
 
-
 # **Exercise:** Write a generator function called `combinations` that takes an iterator and and integer, `r`, as arguments. It should generate tuples that represent all *sorted* subsets of the elements in the iterator with size `r` and no duplicates.
 #
 # Test your function by generating and printing all hands with two distinct cards.
 # Then use `ilen` to count how many there are, and confirm that it's `52 * 51 / 2`.
 
 
-
-
-
-
-
-
-
 # The `itertools` library provides a function called `combinations` that does the same thing.
-
 
 
 # ## Generating hands
@@ -178,11 +147,9 @@ ilen(product(it, repeat=2))
 # We can use `combinations ` to write a generator that yields all valid hands with `n` playing cards, where "valid" means that the cards are in sorted order with no duplicates.
 
 
-
 ilen(hand_generator(2))
 
 # If you ever find yourself looping through an iterator and yielding all of the elements, you can simplify the code using `yield from`.
-
 
 
 ilen(hand_generator(2))
@@ -193,6 +160,7 @@ ilen(hand_generator(3))
 
 ilen(hand_generator(4))
 
+
 # I'm not patient enough to let this one finish.
 
 # +
@@ -202,14 +170,10 @@ ilen(hand_generator(4))
 # But if we only care about the number of combinations, we can use [`math.comb`](https://docs.python.org/3/library/math.html).
 
 
-
 # ## How many flushes?
 #
 # In poker, a "flush" is a hand where all cards have the same suit.
 # To check whether a hand is a flush, it is convenient to extract the suit part of the cards and make a set.
-
-
-
 
 
 # **Exercise:** Write a function called `is_flush` that takes a hand as an argument and returns `True` if all cards are the same suit.
@@ -217,17 +181,6 @@ ilen(hand_generator(4))
 # Then write a generator function called `flush_generator` that takes an integer `n` and return all hands with `n` cards that are flushes.
 #
 # What fraction of hands with 3, 4, and 5 cards are flushes?
-
-
-
-
-
-
-
-
-
-
-
 
 
 # ## Write your own product
@@ -303,15 +256,6 @@ for pair in itertools.product(range(2), range(3), range(4)):
 # **Exercise:** Write a generator function that takes an arbitrary number of iterables and yields their Cartesian product. Compare the results to `itertools.product`.
 #
 # Hint: I found it easiest to write this recursively.
-
-
-
-
-
-
-
-
-
 
 
 # + [markdown] tags=[]

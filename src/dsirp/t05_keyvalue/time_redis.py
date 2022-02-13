@@ -39,17 +39,7 @@ import sys
 
 IN_COLAB = 'google.colab' in sys.modules
 
-if IN_COLAB:
-    # !pip install redis-server
-    # !/usr/local/lib/python*/dist-packages/redis_server/bin/redis-server --daemonize yes
-else:
-    # !redis-server --daemonize yes
-# -
-
-try:
-    import redis
-except ImportError:
-    # !pip install redis
+# !redis-server --daemonize yes
 
 # +
 import redis
@@ -59,12 +49,13 @@ r = redis.Redis()
 # +
 import os
 
+
 def etime():
     """Measures user and system time this process has used.
 
     Returns the sum of user and system time."""
     user, sys, chuser, chsys, real = os.times()
-    return user+sys
+    return user + sys
 
 
 # -
@@ -94,7 +85,7 @@ def run_timing_test(func, max_time=1):
     ns = []
     ts = []
     for i in range(10, 28):
-        n = 2**i
+        n = 2 ** i
         t = time_func(func, n)
         print(n, t)
         if t > 0:
@@ -144,7 +135,7 @@ def fit(ns, ts, exp=1.0, index=-1):
     tfit = []
     for n in ns:
         ratio = n / nref
-        t = ratio**exp * tref
+        t = ratio ** exp * tref
         tfit.append(t)
 
     return tfit
@@ -152,6 +143,7 @@ def fit(ns, ts, exp=1.0, index=-1):
 
 # +
 import matplotlib.pyplot as plt
+
 
 def plot_timing_test(ns, ts, label='', color='C0', exp=1.0, scale='log'):
     """Plots data and a fitted curve.
@@ -177,5 +169,3 @@ def plot_timing_test(ns, ts, label='', color='C0', exp=1.0, scale='log'):
 # -
 
 plot_timing_test(ns, ts, scale='linear')
-
-

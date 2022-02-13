@@ -8,3 +8,4 @@ html5lib
 beautifulsoup4
 redis
 redis-py
+EoN

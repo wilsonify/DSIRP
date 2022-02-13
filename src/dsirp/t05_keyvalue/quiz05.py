@@ -41,19 +41,10 @@
 # +
 import sys
 
-IN_COLAB = 'google.colab' in sys.modules
-
-if IN_COLAB:
-    # !pip install redis-server
-    # !/usr/local/lib/python*/dist-packages/redis_server/bin/redis-server --daemonize yes
-else:
-    # !redis-server --daemonize yes
+# !redis-server --daemonize yes
 # -
 
-try:
-    import redis
-except ImportError:
-    # !pip install redis
+import redis
 
 # +
 import redis

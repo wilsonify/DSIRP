@@ -87,7 +87,7 @@ import pandas as pd
 n = np.array([10, 100, 1000, 10000])
 table = pd.DataFrame(index=n)
 table['Algorithm A'] = 100 * n + 1
-table['Algorithm B'] = n**2 + n + 1
+table['Algorithm B'] = n ** 2 + n + 1
 table['Ratio (B/A)'] = table['Algorithm B'] / table['Algorithm A']
 table
 # -
@@ -117,7 +117,7 @@ import pandas as pd
 n = np.array([10, 100, 1000, 10000])
 table = pd.DataFrame(index=n)
 table['Algorithm C'] = n + 1000000
-table['Algorithm B'] = n**2 + n + 1
+table['Algorithm B'] = n ** 2 + n + 1
 table['Ratio (C/B)'] = table['Algorithm B'] / table['Algorithm C']
 table
 # -
@@ -136,7 +136,7 @@ ns = np.arange(10, 1500)
 ys = 100 * ns + 1
 plt.plot(ns, ys, label='Algorithm A')
 
-ys = ns**2 + ns + 1
+ys = ns ** 2 + ns + 1
 plt.plot(ns, ys, label='Algorithm B')
 
 ys = ns + 1_000_000
@@ -247,9 +247,9 @@ compute_sum(t)
 
 # The built-in function `sum` is also linear because it does the same thing, but it tends to be faster because it is a more efficient implementation; in the language of algorithmic analysis, it has a smaller leading coefficient.
 
-# %timeit compute_sum(t)
+compute_sum(t)
 
-# %timeit sum(t)
+sum(t)
 
 # ## Example: Sorting
 #

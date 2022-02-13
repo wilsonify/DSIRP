@@ -114,7 +114,7 @@ def test_dft(N):
     X = dft(x)
 
 
-# %time test_dft(512)
+test_dft(512)
 
 ns, ts = run_timing_test(test_dft, start_at=5)
 plot_timing_test(ns, ts, 'test_dft', exp=2)
@@ -175,7 +175,7 @@ def test_fft_norec(N):
     spectrum = fft_norec(x)
 
 
-# %time test_fft_norec(512)
+test_fft_norec(512)
 
 ns, ts = run_timing_test(test_fft_norec, start_at=5)
 plot_timing_test(ns, ts, 'test_fft_norec', exp=2)
@@ -200,7 +200,7 @@ def test_fft_rec(N):
     spectrum = fft_rec(x)
 
 
-# %time test_fft_rec(512)
+test_fft_rec(512)
 
 ns, ts = run_timing_test(test_fft_rec)
 plot_timing_test(ns, ts, 'test_fft_rec', exp=1)

@@ -228,10 +228,7 @@ class BSTree:
 # It takes as a parameter a NetworkX graph that represents a tree, and it returns a dictionary that maps from each node to a position in the Cartesian plane.
 # If we pass this dictionary to `nx.draw`, it lays the tree out accordingly.
 
-try:
-    import EoN
-except ImportError:
-    # !pip install EoN
+import EoN
 
 # +
 import networkx as nx

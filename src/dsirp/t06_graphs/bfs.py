@@ -108,9 +108,9 @@ def plain_bfs(G, start):
 
 G = nx.watts_strogatz_graph(1000, 10, 0.01)
 
-# %timeit reachable_nodes_bfs(G, 0)
+reachable_nodes_bfs(G, 0)
 
-# %timeit plain_bfs(G, 0)
+plain_bfs(G, 0)
 
 # ## Dijkstra's algorithm
 #
@@ -151,13 +151,13 @@ d1 == d2
 
 # And let's see which version is faster.
 
-# %timeit shortest_path_dijkstra(G, 0)
+shortest_path_dijkstra(G, 0)
 
-# %timeit plain_shortest_path(G, 0)
+plain_shortest_path(G, 0)
 
 # We can also compare it to the NetworkX function that does the same thing.
 
-# %timeit nx.shortest_path_length(G, 0)
+nx.shortest_path_length(G, 0)
 
 # ## The WS Experiment
 #
