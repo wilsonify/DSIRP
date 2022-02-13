@@ -180,7 +180,7 @@ def test_main():
             local, _ = urlretrieve(url, filename)
             print('Downloaded ' + local)
 
-    download('https://github.com/AllenDowney/DSIRP/raw/main/american-english')
+    # download('https://github.com/AllenDowney/DSIRP/raw/main/american-english')
     # -
 
     # The file contains one word per line, so we can read the file and split it into a list of words like this:

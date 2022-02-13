@@ -31,7 +31,7 @@ def test_main():
             local, _ = urlretrieve(url, filename)
             print('Downloaded ' + local)
 
-    download('https://github.com/AllenDowney/DSIRP/raw/main/american-english')
+    # download('https://github.com/AllenDowney/DSIRP/raw/main/american-english')
 
     # -
 

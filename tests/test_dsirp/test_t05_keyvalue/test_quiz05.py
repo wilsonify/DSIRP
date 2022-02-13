@@ -34,17 +34,10 @@ def test_main():
 
     IN_COLAB = 'google.colab' in sys.modules
 
-    if IN_COLAB:
-    # !pip install redis-server
-    # !/usr/local/lib/python*/dist-packages/redis_server/bin/redis-server --daemonize yes
-    else:
     # !redis-server --daemonize yes
-    # -
 
-    try:
-        import redis
-    except ImportError:
-    # !pip install redis
+
+    import redis
 
     # +
     import redis
@@ -76,7 +69,7 @@ def test_main():
             local, _ = urlretrieve(url, filename)
             print('Downloaded ' + local)
 
-    download('https://github.com/AllenDowney/BiteSizeBayes/raw/master/gss_bayes.csv')
+    # download('https://github.com/AllenDowney/BiteSizeBayes/raw/master/gss_bayes.csv')
     # -
 
     # The following cell loads the data into a Pandas `DataFrame`. If you are not familiar with Pandas, I will explain what you need to know.

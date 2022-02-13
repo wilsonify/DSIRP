@@ -152,10 +152,8 @@ def test_main():
     #
     # To see what it looks like, we'll use NetworkX and a library called EoN.
 
-    try:
-        import EoN
-    except ImportError:
-    # !pip install EoN
+
+    import EoN
 
     # The following function traverses the Huffman tree and makes a NetworkX `DiGraph`.
 

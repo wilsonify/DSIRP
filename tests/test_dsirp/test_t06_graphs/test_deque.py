@@ -271,7 +271,7 @@ def test_main():
             local, _ = urlretrieve(url, filename)
             print('Downloaded ' + local)
 
-    download('https://github.com/AllenDowney/DSIRP/raw/main/timing.py')
+    #download('https://github.com/AllenDowney/DSIRP/raw/main/timing.py')
 
     # +
     from collections import deque

@@ -90,10 +90,7 @@ def test_main():
 
     # I'll use NetworkX and EoN to draw this tree.
 
-    try:
-        import EoN
-    except ImportError:
-    # !pip install EoN
+    import EoN
 
     # +
     import networkx as nx

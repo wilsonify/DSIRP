@@ -129,19 +129,9 @@ def test_main():
 
     IN_COLAB = 'google.colab' in sys.modules
 
-    if IN_COLAB:
-    # !pip install redis-server
-    # !/usr/local/lib/python*/dist-packages/redis_server/bin/redis-server --daemonize yes
-    else:
     # !redis-server --daemonize yes
-    # -
 
     # And make sure the Redis client is installed.
-
-    try:
-        import redis
-    except ImportError:
-    # !pip install redis
 
     # We'll make a `Redis` object that creates the connection to the Redis database.
 
