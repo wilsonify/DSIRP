@@ -1,5 +1,9 @@
+from dsirp.t01_algorithms import quiz01
+
+
 def test_smoke():
     print("fire?")
+    print(dir(quiz01))
 
 
 def test_main():

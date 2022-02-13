@@ -1,6 +1,9 @@
+from dsirp.t05_keyvalue import linked_list
+
+
 def test_smoke():
     print("fire?")
-
+    print(dir(linked_list))
 
 def test_main():
     # # Linked List

@@ -1,5 +1,9 @@
+from dsirp.t02_structures import generator
+
+
 def test_smoke():
     print("fire?")
+    print(dir(generator))
 
 def test_main():
     # # Generators and Iterators

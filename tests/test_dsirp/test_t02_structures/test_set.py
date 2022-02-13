@@ -1,5 +1,9 @@
+from dsirp.t02_structures import set
+
+
 def test_smoke():
     print("fire?")
+    print(dir(set))
 
 
 def test_main():

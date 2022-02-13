@@ -1,6 +1,9 @@
+from dsirp.t03_search import search
+
+
 def test_smoke():
     print("fire?")
-
+    print(dir(search))
 
 def test_main():
     # # Search

@@ -1,5 +1,8 @@
+from dsirp.t01_algorithms import analysis
+
 def test_smoke():
     print("fire?")
+    print(dir(analysis))
 
 def test_main():
     # # Analysis of Algorithms

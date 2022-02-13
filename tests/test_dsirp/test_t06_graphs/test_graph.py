@@ -1,3 +1,10 @@
+from dsirp.t06_graphs import graph
+
+
+def test_smoke():
+    print("fire?")
+    print(dir(graph))
+
 def test_main():
     # # Graphs
 

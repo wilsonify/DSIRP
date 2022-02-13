@@ -1,5 +1,9 @@
+from dsirp.t04_queues import philosophy
+
+
 def test_smoke():
     print("fire?")
+    print(dir(philosophy))
 
 
 def test_main():
@@ -161,7 +165,7 @@ def test_main():
     # -
 
     url = "https://en.wikipedia.org/wiki/Python_(programming_language)"
-    #download(url)
+    # download(url)
 
     # Now we can parse it and make `soup`.
 

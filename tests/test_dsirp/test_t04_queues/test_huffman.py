@@ -1,6 +1,9 @@
+from dsirp.t04_queues import huffman
+
+
 def test_smoke():
     print("fire?")
-
+    print(dir(huffman))
 
 def test_main():
     # # Huffman Code

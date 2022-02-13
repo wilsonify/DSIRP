@@ -1,5 +1,9 @@
+from dsirp.t06_graphs import deque
+
+
 def test_smoke():
     print("fire?")
+    print(dir(deque))
 
 
 def test_main():

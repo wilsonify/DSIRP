@@ -1,5 +1,9 @@
+from dsirp.t01_algorithms import timing
+
+
 def test_smoke():
     print("fire?")
+    print(dir(timing))
 
 
 def test_main():

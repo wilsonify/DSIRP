@@ -1,5 +1,9 @@
+from dsirp.t06_graphs import bfs
+
+
 def test_smoke():
     print("fire?")
+    print(dir(bfs))
 
 
 def test_main():

@@ -1,5 +1,9 @@
+from dsirp.t02_structures import quiz02
+
+
 def test_smoke():
     print("fire?")
+    print(dir(quiz02))
 
 
 def test_main():

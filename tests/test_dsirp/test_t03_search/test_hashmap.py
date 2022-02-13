@@ -1,5 +1,9 @@
+from dsirp.t03_search import hashmap
+
+
 def test_smoke():
     print("fire?")
+    print(dir(hashmap))
 
 
 def test_main():

@@ -1,3 +1,10 @@
+from dsirp.t07_crawling import mergesort
+
+
+def test_smoke():
+    print("fire?")
+    print(dir(mergesort))
+
 def test_main():
     # # Merge Sort
 

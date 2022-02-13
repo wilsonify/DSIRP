@@ -1,6 +1,8 @@
+from dsirp.t04_queues import heap
+
 def test_smoke():
     print("fire?")
-
+    print(dir(heap))
 
 def test_main():
     # # Priority Queues and Heaps

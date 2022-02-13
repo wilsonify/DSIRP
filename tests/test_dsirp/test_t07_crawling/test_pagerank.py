@@ -1,3 +1,10 @@
+from dsirp.t07_crawling import pagerank
+
+
+def test_smoke():
+    print("fire?")
+    print(dir(pagerank))
+
 def test_main():
     # # PageRank
 

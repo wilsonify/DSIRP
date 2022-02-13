@@ -1,5 +1,9 @@
+from dsirp.t05_keyvalue import indexer
+
+
 def test_smoke():
     print("fire?")
+    print(dir(indexer))
 
 
 def test_main():
@@ -98,7 +102,7 @@ def test_main():
     # Now let's do the same thing with the text of a Wikipedia page:
 
     url = "https://en.wikipedia.org/wiki/Python_(programming_language)"
-    filename = download(url)
+    filename = basename(url)
 
     fp = open(filename)
     soup2 = BeautifulSoup(fp)

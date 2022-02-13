@@ -1,6 +1,9 @@
+from dsirp.t05_keyvalue import redis
+
+
 def test_smoke():
     print("fire?")
-
+    print(dir(redis))
 
 def test_main():
     # # Redis

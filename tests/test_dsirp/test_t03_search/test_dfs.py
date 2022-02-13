@@ -1,5 +1,9 @@
+from dsirp.t03_search import dfs
+
+
 def test_smoke():
     print("fire?")
+    print(dir(dfs))
 
 
 def test_main():

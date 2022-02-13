@@ -1,5 +1,9 @@
+from dsirp.t05_keyvalue import quiz05
+
+
 def test_smoke():
     print("fire?")
+    print(dir(quiz05))
 
 
 def test_main():
@@ -35,9 +39,6 @@ def test_main():
     IN_COLAB = 'google.colab' in sys.modules
 
     # !redis-server --daemonize yes
-
-
-    import redis
 
     # +
     import redis

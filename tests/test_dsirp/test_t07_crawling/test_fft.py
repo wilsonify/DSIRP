@@ -1,3 +1,10 @@
+from dsirp.t07_crawling import fft
+
+
+def test_smoke():
+    print("fire?")
+    print(dir(fft))
+
 def test_main():
     # # FFT
 

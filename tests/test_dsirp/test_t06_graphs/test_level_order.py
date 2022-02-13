@@ -1,3 +1,10 @@
+from dsirp.t06_graphs import level_order
+
+
+def test_smoke():
+    print("fire?")
+    print(dir(level_order))
+
 def test_main():
     # # Level Order Traversal
 

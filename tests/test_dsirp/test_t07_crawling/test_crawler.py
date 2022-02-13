@@ -1,3 +1,10 @@
+from dsirp.t07_crawling import crawler
+
+
+def test_smoke():
+    print("fire?")
+    print(dir(crawler))
+
 def test_main():
     # # Crawler
 

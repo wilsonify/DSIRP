@@ -1,5 +1,9 @@
+from dsirp.t04_queues import quiz04
+
+
 def test_smoke():
     print("fire?")
+    print(dir(quiz04))
 
 
 def test_main():

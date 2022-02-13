@@ -1,6 +1,8 @@
+from dsirp.t02_structures import recursion
+
 def test_smoke():
     print("fire?")
-
+    print(dir(recursion))
 
 def test_main():
     # # Recursion

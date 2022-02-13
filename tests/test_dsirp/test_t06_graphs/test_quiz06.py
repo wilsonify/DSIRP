@@ -1,3 +1,10 @@
+from dsirp.t06_graphs import quiz06
+
+
+def test_smoke():
+    print("fire?")
+    print(dir(quiz06))
+
 def test_main():
     # # Quiz 6
     #

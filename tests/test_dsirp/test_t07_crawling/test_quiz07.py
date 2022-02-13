@@ -1,3 +1,11 @@
+from dsirp.t07_crawling import quiz07
+
+
+def test_smoke():
+    print("fire?")
+    print(dir(quiz07))
+
+
 def test_main():
     # # Quiz 7
     #
